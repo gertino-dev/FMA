@@ -1,6 +1,6 @@
 import { motion } from 'motion/react';
 import { Search, Calendar, Globe, ChevronRight } from 'lucide-react';
-import { COMPETITIONS } from '../constants';
+import { RESULTS_COMPETITIONS } from '../constants';
 
 import { Page, Competition } from '../types';
 
@@ -24,7 +24,7 @@ export const ResultsPage = ({ setPage, setSelectedCompetition }: ResultsPageProp
     <div className="flex flex-col lg:flex-row gap-8 mb-16 items-stretch lg:items-center justify-between">
       <div className="relative lg:w-96">
         <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-text-muted z-10" size={16} />
-        <input type="text" placeholder="Rechercher une compétition..." className="w-full bg-bg-surface border-2 border-border-main py-3 pl-12 pr-6 focus:outline-none focus:border-brand-primary transition-colors text-text-main -skew-x-12 shadow-sm text-sm" />
+        <input type="text" placeholder="Rechercher un résultat..." className="w-full bg-bg-surface border-2 border-border-main py-3 pl-12 pr-6 focus:outline-none focus:border-brand-primary transition-colors text-text-main -skew-x-12 shadow-sm text-sm" />
       </div>
       <div className="flex gap-4">
         {['2026', '2025', '2024'].map(year => (
@@ -36,7 +36,7 @@ export const ResultsPage = ({ setPage, setSelectedCompetition }: ResultsPageProp
     </div>
 
     <div className="grid grid-cols-1 gap-6">
-      {COMPETITIONS.map((comp, i) => (
+      {RESULTS_COMPETITIONS.map((comp, i) => (
         <motion.div 
           key={comp.id}
           initial={{ opacity: 0, x: -20 }}
@@ -55,7 +55,7 @@ export const ResultsPage = ({ setPage, setSelectedCompetition }: ResultsPageProp
             </div>
             <div className="text-center sm:text-left">
               <p className="text-brand-primary text-[10px] font-black uppercase tracking-widest mb-1">{comp.date}</p>
-              <h3 className="text-xl font-display font-bold uppercase italic tracking-tight break-words hyphens-auto">{comp.title}</h3>
+              <h3 className="text-xl font-display font-bold uppercase italic tracking-tight break-words hyphens-auto whitespace-pre-line">{comp.title}</h3>
               <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4 mt-2">
                 <span className="text-[10px] text-text-muted uppercase tracking-widest flex items-center gap-1"><Globe size={10} /> {comp.location}</span>
                 <span className="text-[10px] text-text-muted uppercase tracking-widest flex items-center gap-1"><Calendar size={10} /> {comp.category}</span>

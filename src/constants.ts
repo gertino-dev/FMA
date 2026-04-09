@@ -123,32 +123,144 @@ export const ATHLETES = [
 
 export const COMPETITIONS = [
   {
-    id: 1,
-    title: "Championnats de Madagascar d'Athlétisme",
-    location: "Stade d'Alarobia, Antananarivo",
-    date: "15 - 17 Août 2025",
+    id: 202601,
+    title: "TESTS épreuves pistes en vue des compétitions internationales",
+    location: "Antananarivo (Tana)",
+    date: "15 mars 2026",
     category: "National",
     status: "À venir",
     image: "/image/image%20(13).png"
   },
   {
-    id: 2,
-    title: "Meeting International d'Athlétisme de Tana",
-    location: "Antananarivo, Madagascar",
-    date: "10 Juillet 2025",
+    id: 202602,
+    title: "Championnat du monde en salle",
+    location: "Torun (Pologne)",
+    date: "20 au 22 mars 2026",
     category: "International",
-    status: "Confirmé",
+    status: "À venir",
     image: "/image/image%20(14).png"
   },
   {
-    id: 3,
-    title: "Marathon de Tana",
-    location: "Antananarivo, Madagascar",
-    date: "26 Octobre 2025",
-    category: "Route",
-    status: "Inscriptions ouvertes",
+    id: 202603,
+    title: "Meeting St Denis",
+    location: "La Réunion",
+    date: "20 avril 2026",
+    category: "International",
+    status: "À venir",
     image: "/image/image%20(15).png"
+  },
+  {
+    id: 202604,
+    title: "Course sur route « La vache qui rit » (2km, 4km, 15km)",
+    location: "Antananarivo (Tana)",
+    date: "26 avril 2026",
+    category: "National",
+    status: "À venir",
+    image: "/image/image%20(1).png"
+  },
+  {
+    id: 202605,
+    title: "Championnats de Madagascar Trails (Court et Long) — UTOP",
+    location: "Antananarivo (Tana)",
+    date: "1 au 3 mai 2026",
+    category: "National",
+    status: "À venir",
+    image: "/image/image%20(2).png"
+  },
+  {
+    id: 202606,
+    title: "24e Championnats d'Afrique seniors",
+    location: "Accra (Ghana)",
+    date: "12 au 17 mai 2026",
+    category: "International",
+    status: "À venir",
+    image: "/image/image%20(3).png"
+  },
+  {
+    id: 202607,
+    title: "SACA Championnats d'Afrique Austral U18 / U20",
+    location: "Maurice",
+    date: "05 au 07 juin 2026",
+    category: "International",
+    status: "À venir",
+    image: "/image/image%20(4).png"
+  },
+  {
+    id: 202608,
+    title: "Championnats de Madagascar Jeunes Piste",
+    location: "Antananarivo (Tana)",
+    date: "31 juillet au 02 août 2026",
+    category: "National",
+    status: "À venir",
+    image: "/image/image%20(5).png"
+  },
+  {
+    id: 202609,
+    title: "Championnats de Madagascar Séniors + Épreuves combinées (Piste)",
+    location: "Antananarivo (Tana)",
+    date: "07 au 09 août 2026",
+    category: "National",
+    status: "À venir",
+    image: "/image/image%20(6).png"
+  },
+  {
+    id: 202610,
+    title: "Sémi-marathon VIMA",
+    location: "Majunga",
+    date: "30 août 2026",
+    category: "National",
+    status: "À venir",
+    image: "/image/image%20(7).png"
+  },
+  {
+    id: 202611,
+    title: "Marathon International",
+    location: "Antananarivo (Tana)",
+    date: "10 au 11 octobre 2026",
+    category: "National",
+    status: "À venir",
+    image: "/image/image%20(8).png"
+  },
+  {
+    id: 202612,
+    title: "4e Youth Olympic Games",
+    location: "Dakar",
+    date: "31 octobre au 13 novembre 2026",
+    category: "International",
+    status: "À venir",
+    image: "/image/image%20(9).png"
+  },
+  {
+    id: 202613,
+    title: "Relais Marathon St Benoit",
+    location: "La Réunion",
+    date: "11 novembre 2026",
+    category: "International",
+    status: "À venir",
+    image: "/image/image%20(10).png"
   }
+];
+
+export const RESULTS_COMPETITIONS = [
+  {
+    id: 202603,
+    title:
+      "CHAMPIONNATS D’AFRIQUE SACA REGION SUD U18 U20 (MAURICE)\nCHAMPIONNATS D’AFRIQUE SENIORS (ACCRA GHANA)",
+    location: "—",
+    date: "14 ET 15 MARS 2026",
+    category: "Sélection",
+    status: "Résultats",
+    image: "/image/image%20(13).png",
+  },
+  {
+    id: 2026032,
+    title: "RESULTATS TEST 14 ET 15 MARS 2026\nU18 / U20 — ORDRE DE MÉRITE",
+    location: "Madagascar",
+    date: "14 ET 15 MARS 2026",
+    category: "Ordre de mérite",
+    status: "Résultats",
+    image: "/image/image%20(14).png",
+  },
 ];
 
 export const RANKINGS = [
