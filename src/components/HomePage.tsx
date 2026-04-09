@@ -30,6 +30,8 @@ export const HomePage = ({ setPage, setSelectedArticle, setSelectedCompetition, 
   const [heroIndex, setHeroIndex] = useState(0);
   const [videoIndex, setVideoIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
+  const [showAllEvents, setShowAllEvents] = useState(false);
+  const [showAllUpcoming, setShowAllUpcoming] = useState(false);
   
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
@@ -456,7 +458,7 @@ export const HomePage = ({ setPage, setSelectedArticle, setSelectedCompetition, 
             </button>
           </div>
           <div className="space-y-4">
-            {COMPETITIONS.map((comp) => (
+            {(showAllEvents ? COMPETITIONS : COMPETITIONS.slice(0, 5)).map((comp) => (
               <div 
                 key={comp.id} 
                 onClick={() => {
@@ -478,12 +480,19 @@ export const HomePage = ({ setPage, setSelectedArticle, setSelectedCompetition, 
               </div>
             ))}
           </div>
-          <button 
-            onClick={() => setPage('competitions')}
-            className="w-full btn-outline py-3 text-sm"
-          >
-            Voir tout le calendrier
-          </button>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {COMPETITIONS.length > 5 && (
+              <button
+                onClick={() => setShowAllEvents((v) => !v)}
+                className="w-full btn-outline py-3 text-sm"
+              >
+                {showAllEvents ? 'Voir moins' : 'Voir plus'}
+              </button>
+            )}
+            <button onClick={() => setPage('competitions')} className="w-full btn-outline py-3 text-sm">
+              Voir tout le calendrier
+            </button>
+          </div>
         </div>
       </section>
 
@@ -629,7 +638,7 @@ export const HomePage = ({ setPage, setSelectedArticle, setSelectedCompetition, 
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {COMPETITIONS.map((comp, i) => (
+          {(showAllUpcoming ? COMPETITIONS : COMPETITIONS.slice(0, 6)).map((comp, i) => (
             <motion.div 
               key={comp.id}
               initial={{ opacity: 0, x: 20 }}
@@ -670,6 +679,14 @@ export const HomePage = ({ setPage, setSelectedArticle, setSelectedCompetition, 
             </motion.div>
           ))}
         </div>
+
+        {COMPETITIONS.length > 6 && (
+          <div className="mt-10 flex justify-center">
+            <button onClick={() => setShowAllUpcoming((v) => !v)} className="btn-outline py-3 px-10 text-sm">
+              {showAllUpcoming ? 'Voir moins' : 'Voir plus'}
+            </button>
+          </div>
+        )}
       </section>
 
       {/* Newsletter CTA */}

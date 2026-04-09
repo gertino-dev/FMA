@@ -1,0 +1,235 @@
+{
+  "schemaVersion": 2,
+  "meta": {
+    "updatedAt": "2026-04-09T00:00:00.000Z",
+    "locale": "fr-MG",
+    "season": "2026"
+  },
+  "admin": {
+    "username": "admin",
+    "passwordHash": "$2b$12$IVbgyoMlVAtiAnfYM3jRhuo50Vs28oNRt3Vqscmo.puPKWaDA/8Dm",
+    "createdAt": "2026-04-09T00:00:00.000Z",
+    "updatedAt": "2026-04-09T11:22:24.352Z"
+  },
+  "competitions": [
+    {
+      "id": 202601,
+      "title": "TESTS épreuves pistes en vue des compétitions internationales",
+      "location": "Antananarivo (Tana)",
+      "date": "15 mars 2026",
+      "category": "National",
+      "status": "À venir",
+      "image": "/image/image%20(13).png"
+    },
+    {
+      "id": 202602,
+      "title": "Championnat du monde en salle",
+      "location": "Torun (Pologne)",
+      "date": "20 au 22 mars 2026",
+      "category": "International",
+      "status": "À venir",
+      "image": "/image/image%20(14).png"
+    },
+    {
+      "id": 202603,
+      "title": "Meeting St Denis",
+      "location": "La Réunion",
+      "date": "20 avril 2026",
+      "category": "International",
+      "status": "À venir",
+      "image": "/image/image%20(15).png"
+    },
+    {
+      "id": 202604,
+      "title": "Course sur route « La vache qui rit » (2km, 4km, 15km)",
+      "location": "Antananarivo (Tana)",
+      "date": "26 avril 2026",
+      "category": "National",
+      "status": "À venir",
+      "image": "/image/image%20(1).png"
+    },
+    {
+      "id": 202605,
+      "title": "Championnats de Madagascar Trails (Court et Long) — UTOP",
+      "location": "Antananarivo (Tana)",
+      "date": "1 au 3 mai 2026",
+      "category": "National",
+      "status": "À venir",
+      "image": "/image/image%20(2).png"
+    },
+    {
+      "id": 202606,
+      "title": "24e Championnats d'Afrique seniors",
+      "location": "Accra (Ghana)",
+      "date": "12 au 17 mai 2026",
+      "category": "International",
+      "status": "À venir",
+      "image": "/image/image%20(3).png"
+    },
+    {
+      "id": 202607,
+      "title": "SACA Championnats d'Afrique Austral U18 / U20",
+      "location": "Maurice",
+      "date": "05 au 07 juin 2026",
+      "category": "International",
+      "status": "À venir",
+      "image": "/image/image%20(4).png"
+    },
+    {
+      "id": 202608,
+      "title": "Championnats de Madagascar Jeunes Piste",
+      "location": "Antananarivo (Tana)",
+      "date": "31 juillet au 02 août 2026",
+      "category": "National",
+      "status": "À venir",
+      "image": "/image/image%20(5).png"
+    },
+    {
+      "id": 202609,
+      "title": "Championnats de Madagascar Séniors + Épreuves combinées (Piste)",
+      "location": "Antananarivo (Tana)",
+      "date": "07 au 09 août 2026",
+      "category": "National",
+      "status": "À venir",
+      "image": "/image/image%20(6).png"
+    },
+    {
+      "id": 202610,
+      "title": "Sémi-marathon VIMA",
+      "location": "Majunga",
+      "date": "30 août 2026",
+      "category": "National",
+      "status": "À venir",
+      "image": "/image/image%20(7).png"
+    },
+    {
+      "id": 202611,
+      "title": "Marathon International",
+      "location": "Antananarivo (Tana)",
+      "date": "10 au 11 octobre 2026",
+      "category": "National",
+      "status": "À venir",
+      "image": "/image/image%20(8).png"
+    },
+    {
+      "id": 202612,
+      "title": "4e Youth Olympic Games",
+      "location": "Dakar",
+      "date": "31 octobre au 13 novembre 2026",
+      "category": "International",
+      "status": "À venir",
+      "image": "/image/image%20(9).png"
+    },
+    {
+      "id": 202613,
+      "title": "Relais Marathon St Benoit",
+      "location": "La Réunion",
+      "date": "11 novembre 2026",
+      "category": "International",
+      "status": "À venir",
+      "image": "/image/image%20(10).png"
+    }
+  ],
+  "competitionsV2": [],
+  "results": [
+    {
+      "id": 202603,
+      "title": "CHAMPIONNATS D’AFRIQUE SACA REGION SUD U18 U20 (MAURICE)\nCHAMPIONNATS D’AFRIQUE SENIORS (ACCRA GHANA)",
+      "location": "—",
+      "date": "14 ET 15 MARS 2026",
+      "category": "Sélection",
+      "status": "Résultats",
+      "image": "/image/image%20(13).png"
+    },
+    {
+      "id": 2026032,
+      "title": "RESULTATS TEST 14 ET 15 MARS 2026\nU18 / U20 — ORDRE DE MÉRITE",
+      "location": "Madagascar",
+      "date": "14 ET 15 MARS 2026",
+      "category": "Ordre de mérite",
+      "status": "Résultats",
+      "image": "/image/image%20(14).png"
+    }
+  ],
+  "news": [],
+  "athletes": [],
+  "sponsors": [
+    {
+      "id": "images-jpg",
+      "name": "Sponsor",
+      "logo": "/image%20spons/images.jpg",
+      "order": 1
+    },
+    {
+      "id": "logo-orange-png",
+      "name": "Sponsor",
+      "logo": "/image%20spons/logo-orange.png",
+      "order": 2
+    },
+    {
+      "id": "yas-logo-2024-svg",
+      "name": "Sponsor",
+      "logo": "/image%20spons/Yas_logo_2024.svg",
+      "order": 3
+    }
+  ],
+  "media": [],
+  "home": {
+    "hero": {
+      "slides": [
+        {
+          "id": "hero-1",
+          "title": "Dépassez les limites.",
+          "subtitle": "Fédération Malagasy d'Athlétisme",
+          "image": "/image/image%20(6).png",
+          "cta": {
+            "label": "Voir le calendrier",
+            "to": "competitions"
+          }
+        }
+      ],
+      "rotationMs": 10000,
+      "stats": [
+        {
+          "id": "athletes",
+          "label": "Athlètes",
+          "value": "2,500+"
+        },
+        {
+          "id": "records",
+          "label": "Records",
+          "value": "156"
+        },
+        {
+          "id": "ligues",
+          "label": "Ligues",
+          "value": "22"
+        }
+      ]
+    },
+    "youtube": {
+      "enabled": true,
+      "items": [
+        {
+          "id": "yt-1",
+          "title": "Highlights 2026",
+          "youtubeId": "",
+          "poster": "/image/image%20(1).png"
+        }
+      ]
+    }
+  },
+  "rankings": {
+    "tables": []
+  },
+  "resultDetailsById": {},
+  "direct": {
+    "enabled": false,
+    "youtubeId": "",
+    "title": "Direct Live",
+    "location": "",
+    "viewerCount": null,
+    "planning": []
+  },
+  "mediaImages": []
+}

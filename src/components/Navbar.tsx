@@ -98,6 +98,7 @@ export const Navbar = ({ currentPage, setPage, setAthleteFilter, theme, toggleTh
           >
             Direct
           </motion.button>
+
         </motion.div>
 
         {/* Mobile Toggle */}

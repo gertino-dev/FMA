@@ -1,7 +1,8 @@
+import { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
 import { Calendar, Globe } from 'lucide-react';
 import { Page, Competition } from '../types';
-import { COMPETITIONS } from '../constants';
+import { getPublicDb } from '../lib/publicDb';
 
 interface CompetitionsPageProps {
   setPage: (p: Page) => void;
@@ -9,7 +10,20 @@ interface CompetitionsPageProps {
 }
 
 export const CompetitionsPage = ({ setPage, setSelectedCompetition }: CompetitionsPageProps) => (
-  <div className="pt-40 md:pt-48 pb-20 max-w-7xl mx-auto px-6 min-h-screen">
+  <CompetitionsPageInner setPage={setPage} setSelectedCompetition={setSelectedCompetition} />
+);
+
+const CompetitionsPageInner = ({ setPage, setSelectedCompetition }: CompetitionsPageProps) => {
+  const [items, setItems] = useState<Competition[]>([]);
+
+  useEffect(() => {
+    getPublicDb()
+      .then((db) => setItems(db.competitions ?? []))
+      .catch(() => setItems([]));
+  }, []);
+
+  return (
+    <div className="pt-40 md:pt-48 pb-20 max-w-7xl mx-auto px-6 min-h-screen">
     <motion.div 
       initial={{ opacity: 0, x: -50 }}
       animate={{ opacity: 1, x: 0 }}
@@ -21,7 +35,7 @@ export const CompetitionsPage = ({ setPage, setSelectedCompetition }: Competitio
     </motion.div>
 
     <div className="grid grid-cols-1 gap-8 sm:gap-12">
-      {COMPETITIONS.map((comp, i) => (
+      {items.map((comp, i) => (
         <motion.div 
           key={comp.id}
           initial={{ opacity: 0, x: -30 }}
@@ -89,4 +103,5 @@ export const CompetitionsPage = ({ setPage, setSelectedCompetition }: Competitio
       ))}
     </div>
   </div>
-);
+  );
+};

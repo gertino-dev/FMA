@@ -1,4 +1,21 @@
-export type Page = 'accueil' | 'athletes' | 'competitions' | 'classements' | 'resultats' | 'resultats-detail' | 'article' | 'athlete-profile' | 'direct' | 'mentions' | 'confidentialite' | 'cookies' | 'billetterie' | 'programme' | 'actualites';
+export type Page =
+  | 'accueil'
+  | 'athletes'
+  | 'competitions'
+  | 'classements'
+  | 'resultats'
+  | 'resultats-detail'
+  | 'article'
+  | 'athlete-profile'
+  | 'direct'
+  | 'mentions'
+  | 'confidentialite'
+  | 'cookies'
+  | 'billetterie'
+  | 'programme'
+  | 'actualites'
+  | 'admin-login'
+  | 'admin';
 
 export interface NewsItem {
   id: number;

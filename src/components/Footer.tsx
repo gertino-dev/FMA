@@ -1,6 +1,8 @@
 import { motion } from 'motion/react';
 import { Instagram, Twitter, Facebook, Youtube, Mail, ArrowRight } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
 import { Page } from '../types';
+import { getPublicDb, SponsorPublic } from '../lib/publicDb';
 
 interface FooterProps {
   setPage: (p: Page) => void;
@@ -8,19 +10,26 @@ interface FooterProps {
 }
 
 export const Footer = ({ setPage, setAthleteFilter }: FooterProps) => {
-  const sponsorLogos = [
-    "/image%20spons/images.jpg",
-    "/image%20spons/logo-orange.png",
-    "/image%20spons/Yas_logo_2024.svg",
-  ];
-  const sponsorStrip = [
-    ...sponsorLogos,
-    ...sponsorLogos,
-    ...sponsorLogos,
-    ...sponsorLogos,
-    ...sponsorLogos,
-    ...sponsorLogos,
-  ];
+  const [sponsors, setSponsors] = useState<SponsorPublic[]>([]);
+
+  useEffect(() => {
+    getPublicDb()
+      .then((db) => setSponsors((db.sponsors ?? []).slice().sort((a, b) => a.order - b.order)))
+      .catch(() => setSponsors([]));
+  }, []);
+
+  const sponsorLogos = useMemo(() => sponsors.map((s) => s.logo), [sponsors]);
+  const sponsorStrip = useMemo(() => {
+    if (sponsorLogos.length === 0) return [];
+    return [
+      ...sponsorLogos,
+      ...sponsorLogos,
+      ...sponsorLogos,
+      ...sponsorLogos,
+      ...sponsorLogos,
+      ...sponsorLogos,
+    ];
+  }, [sponsorLogos]);
 
   return (
     <motion.footer 
@@ -33,11 +42,16 @@ export const Footer = ({ setPage, setAthleteFilter }: FooterProps) => {
     {/* Sponsors Section - Full Width Infinite Carousel */}
     <div className="mb-20 py-10 relative sponsor-marquee">
       <div className="sponsor-track">
+        {sponsorStrip.length === 0 && (
+          <div className="text-xs font-black uppercase tracking-widest text-text-muted px-12">
+            Sponsors
+          </div>
+        )}
         {[...sponsorStrip, ...sponsorStrip].map((src, i) => (
           <img
             key={`s-${i}`}
             src={src}
-            alt={`Sponsor ${((i % sponsorStrip.length) % sponsorLogos.length) + 1}`}
+            alt={`Sponsor ${sponsorLogos.length ? ((i % sponsorStrip.length) % sponsorLogos.length) + 1 : ''}`}
             className="h-12 md:h-20 w-auto object-contain"
             referrerPolicy="no-referrer"
             draggable={false}
@@ -158,6 +172,7 @@ export const Footer = ({ setPage, setAthleteFilter }: FooterProps) => {
         <p className="text-text-muted text-xs">© 2026 FMA. Tous droits réservés.</p>
         <div className="flex gap-8 text-text-muted text-xs">
           <button onClick={() => setPage('mentions')} className="hover:text-text-main">Mentions Légales</button>
+          <button onClick={() => setPage('admin-login')} className="hover:text-text-main">Log in</button>
           <button onClick={() => setPage('confidentialite')} className="hover:text-text-main">Confidentialité</button>
           <button onClick={() => setPage('cookies')} className="hover:text-text-main">Cookies</button>
         </div>
