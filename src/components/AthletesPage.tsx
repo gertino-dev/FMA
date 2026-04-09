@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Search, ChevronRight } from 'lucide-react';
 import { Page, Athlete } from '../types';
-import { ATHLETES } from '../constants';
+import { getPublicDb } from '../lib/publicDb';
+import { AthleteAvatar } from './AthleteAvatar';
 
 interface AthletesPageProps {
   setSelectedAthlete: (a: Athlete) => void;
@@ -14,14 +15,21 @@ export const AthletesPage = ({ setSelectedAthlete, setPage, initialFilter = 'Tou
   const [searchTerm, setSearchTerm] = useState('');
   const [activeFilter, setActiveFilter] = useState(initialFilter);
   const [isFilterMenuOpen, setIsFilterMenuOpen] = useState(false);
+  const [athletes, setAthletes] = useState<Athlete[]>([]);
 
   useEffect(() => {
     setActiveFilter(initialFilter);
   }, [initialFilter]);
 
+  useEffect(() => {
+    getPublicDb()
+      .then((db) => setAthletes((db.athletes as Athlete[]) ?? []))
+      .catch(() => setAthletes([]));
+  }, []);
+
   const filters = ['Tous', 'Sprints', 'Sauts', 'Lancers', 'Demi-fond', 'Combinés'];
 
-  const filteredAthletes = ATHLETES.filter(a => 
+  const filteredAthletes = athletes.filter(a => 
     (a.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
      a.discipline.toLowerCase().includes(searchTerm.toLowerCase())) &&
     (activeFilter === 'Tous' || 
@@ -110,11 +118,10 @@ export const AthletesPage = ({ setSelectedAthlete, setPage, initialFilter = 'Tou
             }}
           >
             <div className="aspect-[4/5] overflow-hidden relative">
-              <img 
-                src={athlete.image} 
-                alt={athlete.name} 
+              <AthleteAvatar
+                name={athlete.name}
+                alt={athlete.name}
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                referrerPolicy="no-referrer"
               />
               <div className="absolute top-4 left-4 px-3 py-1 bg-black/50 backdrop-blur-md text-[10px] font-bold uppercase tracking-widest border border-border-main text-white">
                 {athlete.flag} {athlete.country}

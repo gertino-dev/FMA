@@ -1,6 +1,7 @@
 import { motion } from 'motion/react';
 import { ArrowRight, Trophy, Medal } from 'lucide-react';
 import { Page, Athlete } from '../types';
+import { AthleteAvatar } from './AthleteAvatar';
 
 interface AthleteProfilePageProps {
   athlete: Athlete | null;
@@ -15,11 +16,10 @@ export const AthleteProfilePage = ({ athlete, setPage }: AthleteProfilePageProps
       {/* Hero Profile */}
       <div className="relative h-auto lg:h-[80vh] overflow-hidden mb-20">
         <div className="absolute inset-0 z-0">
-          <img 
-            src={athlete.image} 
-            alt={athlete.name} 
+          <AthleteAvatar
+            name={athlete.name}
+            alt={athlete.name}
             className="w-full h-full object-cover opacity-30 blur-2xl scale-110"
-            referrerPolicy="no-referrer"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-bg-main via-bg-main/60 to-transparent" />
         </div>
@@ -30,12 +30,7 @@ export const AthleteProfilePage = ({ athlete, setPage }: AthleteProfilePageProps
             animate={{ opacity: 1, scale: 1 }}
             className="w-64 h-64 lg:w-[450px] lg:h-[450px] shrink-0 border-8 border-border-main shadow-2xl overflow-hidden -rotate-3"
           >
-            <img 
-              src={athlete.image} 
-              alt={athlete.name} 
-              className="w-full h-full object-cover"
-              referrerPolicy="no-referrer"
-            />
+            <AthleteAvatar name={athlete.name} alt={athlete.name} className="w-full h-full object-cover" />
           </motion.div>
 
           <div className="text-center lg:text-left">

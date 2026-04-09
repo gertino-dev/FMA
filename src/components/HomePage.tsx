@@ -17,7 +17,10 @@ import {
   Minus
 } from 'lucide-react';
 import { Page, NewsItem, Competition, Athlete } from '../types';
-import { ATHLETES, COMPETITIONS, RANKINGS, NEWS } from '../constants';
+import { LOCAL_MEDIA_IMAGES } from '../constants';
+import { getPublicDb } from '../lib/publicDb';
+import { AthleteAvatar } from './AthleteAvatar';
+import { CompetitionImage } from './CompetitionImage';
 
 interface HomePageProps {
   setPage: (p: Page) => void;
@@ -32,6 +35,10 @@ export const HomePage = ({ setPage, setSelectedArticle, setSelectedCompetition, 
   const [isMobile, setIsMobile] = useState(false);
   const [showAllEvents, setShowAllEvents] = useState(false);
   const [showAllUpcoming, setShowAllUpcoming] = useState(false);
+  const [news, setNews] = useState<NewsItem[]>([]);
+  const [athletes, setAthletes] = useState<Athlete[]>([]);
+  const [competitions, setCompetitions] = useState<Competition[]>([]);
+  const [rankingsRows, setRankingsRows] = useState<any[]>([]);
   
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
@@ -40,12 +47,16 @@ export const HomePage = ({ setPage, setSelectedArticle, setSelectedCompetition, 
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  const heroImages = [
-    "/image/image%20(6).png",
-    "/image/image%20(1).png",
-    "/image/image%20(3).png",
-    "/image/image%20(2).png"
+  const heroImages = LOCAL_MEDIA_IMAGES.slice(0, 4);
+  const videoItems = [
+    {
+      id: 'v1',
+      title: 'Vidéo officielle FMA',
+      src: '/video/WhatsApp%20Video%202026-04-08%20at%2019.31.25.mp4',
+      poster: LOCAL_MEDIA_IMAGES[0],
+    },
   ];
+  const videoCount = videoItems.length;
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -53,6 +64,27 @@ export const HomePage = ({ setPage, setSelectedArticle, setSelectedCompetition, 
     }, 10000);
     return () => clearInterval(interval);
   }, [heroImages.length]);
+
+  useEffect(() => {
+    getPublicDb()
+      .then((db) => {
+        setNews((db.news as NewsItem[]) ?? []);
+        setAthletes((db.athletes as Athlete[]) ?? []);
+        setCompetitions((db.competitions as Competition[]) ?? []);
+      })
+      .catch(() => {
+        setNews([]);
+        setAthletes([]);
+        setCompetitions([]);
+      });
+  }, []);
+
+  useEffect(() => {
+    fetch('/api/public/rankings')
+      .then((r) => (r.ok ? r.json() : { tables: [] }))
+      .then((data) => setRankingsRows(data?.tables?.flatMap((t: any) => t.rows ?? []) ?? []))
+      .catch(() => setRankingsRows([]));
+  }, []);
 
   return (
     <div className="space-y-32 pb-20 pt-32">
@@ -219,7 +251,7 @@ export const HomePage = ({ setPage, setSelectedArticle, setSelectedCompetition, 
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-12">
-          {NEWS.map((item, i) => (
+          {news.map((item, i) => (
             <motion.div 
               key={item.id}
               initial={{ opacity: 0, y: 30, scale: 0.95 }}
@@ -324,11 +356,10 @@ export const HomePage = ({ setPage, setSelectedArticle, setSelectedCompetition, 
             className="relative mb-12 lg:mb-0"
           >
             <div className="aspect-square overflow-hidden border-4 border-border-main shadow-2xl">
-              <img 
-                src={ATHLETES[0].image} 
-                alt={ATHLETES[0].name} 
+              <AthleteAvatar
+                name={athletes[0]?.name || 'athlete'}
+                alt={athletes[0]?.name || 'Athlète'}
                 className="w-full h-full object-cover"
-                referrerPolicy="no-referrer"
               />
             </div>
             <div className="absolute -bottom-4 -right-4 sm:-bottom-6 sm:-right-6 glass-card p-4 sm:p-8 shadow-2xl skew-x-1 max-w-[200px] sm:max-w-none">
@@ -338,13 +369,13 @@ export const HomePage = ({ setPage, setSelectedArticle, setSelectedCompetition, 
                 </div>
                 <div className="min-w-0">
                   <p className="text-text-muted text-[8px] sm:text-[10px] uppercase tracking-widest">Discipline</p>
-                  <p className="text-sm sm:text-lg font-display font-bold truncate">{ATHLETES[0].discipline}</p>
+                  <p className="text-sm sm:text-lg font-display font-bold truncate">{athletes[0]?.discipline || '—'}</p>
                 </div>
               </div>
               <div className="flex gap-4 sm:gap-8">
                 <div>
                   <p className="text-text-muted text-[8px] sm:text-[10px] uppercase tracking-widest">Record</p>
-                  <p className="text-sm sm:text-xl font-display font-bold">{ATHLETES[0].performance}</p>
+                  <p className="text-sm sm:text-xl font-display font-bold">{athletes[0]?.performance || '—'}</p>
                 </div>
                 <div>
                   <p className="text-text-muted text-[8px] sm:text-[10px] uppercase tracking-widest">Rang</p>
@@ -358,7 +389,7 @@ export const HomePage = ({ setPage, setSelectedArticle, setSelectedCompetition, 
             <div>
               <h2 className="text-brand-primary text-xs sm:text-sm font-bold uppercase tracking-[0.3em] mb-3 sm:mb-4">Athlète en vedette</h2>
               <h3 className="text-4xl sm:text-5xl md:text-7xl font-display font-black italic uppercase tracking-tighter mb-4 sm:mb-6">
-                {ATHLETES[0].name}
+                {athletes[0]?.name || 'Athlète FMA'}
               </h3>
               <p className="text-text-muted text-base sm:text-lg leading-relaxed">
                 La championne de Madagascar du 100m haies continue de porter haut les couleurs nationales sur la scène internationale. Découvrez son parcours et ses prochains défis.
@@ -373,12 +404,13 @@ export const HomePage = ({ setPage, setSelectedArticle, setSelectedCompetition, 
               <div className="p-4 sm:p-6 bg-bg-surface border border-border-main min-w-0">
                 <Globe className="text-brand-primary mb-2 sm:mb-3 sm:w-6 sm:h-6" size={20} />
                 <p className="text-xs sm:text-sm text-text-muted uppercase tracking-widest mb-1">Pays</p>
-                <p className="text-xl sm:text-2xl font-display font-bold truncate">{ATHLETES[0].country}</p>
+                <p className="text-xl sm:text-2xl font-display font-bold truncate">{athletes[0]?.country || 'Madagascar'}</p>
               </div>
             </div>
             <button 
               onClick={() => {
-                setSelectedAthlete(ATHLETES[0]);
+                if (!athletes[0]) return;
+                setSelectedAthlete(athletes[0]);
                 setPage('athlete-profile');
               }}
               className="btn-primary"
@@ -409,11 +441,11 @@ export const HomePage = ({ setPage, setSelectedArticle, setSelectedCompetition, 
                 </tr>
               </thead>
               <tbody>
-                {RANKINGS.slice(0, 5).map((row, i) => (
+                {rankingsRows.slice(0, 5).map((row, i) => (
                   <tr 
                     key={i} 
                     onClick={() => {
-                      const athlete = ATHLETES.find(a => a.name === row.athlete);
+                      const athlete = athletes.find(a => a.name === row.athlete);
                       if (athlete) {
                         setSelectedAthlete(athlete);
                         setPage('athlete-profile');
@@ -458,7 +490,7 @@ export const HomePage = ({ setPage, setSelectedArticle, setSelectedCompetition, 
             </button>
           </div>
           <div className="space-y-4">
-            {(showAllEvents ? COMPETITIONS : COMPETITIONS.slice(0, 5)).map((comp) => (
+            {(showAllEvents ? competitions : competitions.slice(0, 5)).map((comp) => (
               <div 
                 key={comp.id} 
                 onClick={() => {
@@ -469,7 +501,7 @@ export const HomePage = ({ setPage, setSelectedArticle, setSelectedCompetition, 
               >
                 <div className="flex gap-4">
                   <div className="w-16 h-16 bg-bg-main overflow-hidden flex-shrink-0">
-                    <img src={comp.image} alt="" className="w-full h-full object-cover group-hover:scale-110 transition-transform" referrerPolicy="no-referrer" />
+                    <CompetitionImage title={comp.title} alt={comp.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform" />
                   </div>
                   <div>
                     <p className="text-brand-primary text-[10px] font-black uppercase tracking-widest mb-1">{comp.date}</p>
@@ -481,7 +513,7 @@ export const HomePage = ({ setPage, setSelectedArticle, setSelectedCompetition, 
             ))}
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {COMPETITIONS.length > 5 && (
+            {competitions.length > 5 && (
               <button
                 onClick={() => setShowAllEvents((v) => !v)}
                 className="w-full btn-outline py-3 text-sm"
@@ -511,13 +543,13 @@ export const HomePage = ({ setPage, setSelectedArticle, setSelectedCompetition, 
             {/* Desktop Navigation (Hidden on small mobile) */}
             <div className="hidden md:flex gap-4">
               <button 
-                onClick={() => setVideoIndex(prev => (prev - 1 + 5) % 5)}
+                onClick={() => setVideoIndex(prev => (prev - 1 + videoCount) % videoCount)}
                 className="w-14 h-14 bg-bg-main border border-border-main flex items-center justify-center hover:bg-brand-primary transition-all text-text-main cursor-pointer z-20"
               >
                 <ChevronRight size={24} className="rotate-180" />
               </button>
               <button 
-                onClick={() => setVideoIndex(prev => (prev + 1) % 5)}
+                onClick={() => setVideoIndex(prev => (prev + 1) % videoCount)}
                 className="w-14 h-14 bg-bg-main border border-border-main flex items-center justify-center hover:bg-brand-primary transition-all text-text-main cursor-pointer z-20"
               >
                 <ChevronRight size={24} />
@@ -529,13 +561,13 @@ export const HomePage = ({ setPage, setSelectedArticle, setSelectedCompetition, 
         <div className="relative flex justify-center items-center h-[350px] md:h-[700px] group/carousel">
           {/* Floating Navigation Buttons (Visible on Mobile/Tablet, Hidden on Desktop) */}
           <button 
-            onClick={() => setVideoIndex(prev => (prev - 1 + 5) % 5)}
+            onClick={() => setVideoIndex(prev => (prev - 1 + videoCount) % videoCount)}
             className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-brand-primary/90 text-white flex items-center justify-center z-40 md:hidden hover:bg-brand-primary transition-all shadow-xl"
           >
             <ChevronRight size={20} className="rotate-180" />
           </button>
           <button 
-            onClick={() => setVideoIndex(prev => (prev + 1) % 5)}
+            onClick={() => setVideoIndex(prev => (prev + 1) % videoCount)}
             className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-brand-primary/90 text-white flex items-center justify-center z-40 md:hidden hover:bg-brand-primary transition-all shadow-xl"
           >
             <ChevronRight size={20} />
@@ -547,11 +579,11 @@ export const HomePage = ({ setPage, setSelectedArticle, setSelectedCompetition, 
               transform: `translateX(calc(50% - ${isMobile ? (videoIndex * 85) + 42.5 : (videoIndex * 70) + 35}vw))` 
             }}
           >
-            {[0, 1, 2, 3, 4].map((i) => {
+            {videoItems.map((item, i) => {
               const isActive = i === videoIndex;
               return (
                 <motion.div
-                  key={i}
+                  key={item.id}
                   animate={{
                     scale: isActive ? 1 : 0.85,
                     opacity: isActive ? 1 : 0.3,
@@ -561,30 +593,28 @@ export const HomePage = ({ setPage, setSelectedArticle, setSelectedCompetition, 
                   className="relative flex-shrink-0 w-[85vw] md:w-[70vw] aspect-video border border-border-main overflow-hidden cursor-pointer group"
                   onClick={() => setVideoIndex(i)}
                 >
-                  <img 
-                    src={`/image/image%20(${(i % 15) + 1}).png`} 
-                    alt="Video" 
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000"
-                    referrerPolicy="no-referrer"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                  
-                  {isActive && (
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <motion.div 
-                        initial={{ scale: 0, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        whileHover={{ scale: 1.1 }}
-                        className="w-14 h-14 md:w-20 md:h-20 bg-brand-primary flex items-center justify-center text-white shadow-[0_0_50px_rgba(225,29,72,0.5)]"
-                      >
-                        <Play size={isActive ? 32 : 24} className="md:w-8 md:h-8 w-6 h-6" fill="currentColor" />
-                      </motion.div>
-                    </div>
+                  {isActive ? (
+                    <video
+                      className="w-full h-full object-cover"
+                      controls
+                      playsInline
+                      preload="metadata"
+                    >
+                      <source src={item.src} type="video/mp4" />
+                    </video>
+                  ) : (
+                    <img
+                      src={item.poster}
+                      alt="Video"
+                      className="w-full h-full object-cover"
+                      referrerPolicy="no-referrer"
+                    />
                   )}
-
-                  <div className={`absolute bottom-6 md:bottom-10 left-6 md:left-10 right-6 md:right-10 transition-all duration-500 ${isActive ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+                  {!isActive && <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />}
+                  
+                  <div className={`absolute top-6 md:top-10 left-6 md:left-10 right-6 md:right-10 pointer-events-none transition-all duration-500 ${isActive ? 'translate-y-0 opacity-100' : '-translate-y-8 opacity-0'}`}>
                     <p className="text-brand-primary font-black uppercase tracking-[0.3em] mb-2 text-[8px] md:text-xs">Highlights 2026</p>
-                    <h3 className="text-xl md:text-5xl font-display font-black italic uppercase text-white tracking-tighter leading-none">Performance Exceptionnelle #{i + 1}</h3>
+                    <h3 className="text-xl md:text-5xl font-display font-black italic uppercase text-white tracking-tighter leading-none">{item.title}</h3>
                   </div>
                 </motion.div>
               );
@@ -593,9 +623,9 @@ export const HomePage = ({ setPage, setSelectedArticle, setSelectedCompetition, 
         </div>
         
         <div className="flex justify-center gap-3 mt-8 md:mt-12">
-          {[0, 1, 2, 3, 4].map((i) => (
+          {videoItems.map((item, i) => (
             <button 
-              key={i}
+              key={item.id}
               onClick={() => setVideoIndex(i)}
               className={`h-1 transition-all duration-500 ${videoIndex === i ? 'bg-brand-primary w-8 md:w-12' : 'bg-border-main w-4 md:w-6'}`}
             />
@@ -638,7 +668,7 @@ export const HomePage = ({ setPage, setSelectedArticle, setSelectedCompetition, 
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {(showAllUpcoming ? COMPETITIONS : COMPETITIONS.slice(0, 6)).map((comp, i) => (
+          {(showAllUpcoming ? competitions : competitions.slice(0, 6)).map((comp, i) => (
             <motion.div 
               key={comp.id}
               initial={{ opacity: 0, x: 20 }}
@@ -648,7 +678,7 @@ export const HomePage = ({ setPage, setSelectedArticle, setSelectedCompetition, 
               className="glass-card overflow-hidden group hover:border-brand-primary/50 transition-colors"
             >
               <div className="h-48 overflow-hidden relative">
-                <img src={comp.image} alt="" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" referrerPolicy="no-referrer" />
+                <CompetitionImage title={comp.title} alt={comp.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                 <div className="absolute top-4 right-4 px-3 py-1 bg-bg-surface/50 backdrop-blur-md text-[10px] font-bold uppercase tracking-widest border border-border-main text-text-main">
                   {comp.status}
                 </div>
@@ -680,7 +710,7 @@ export const HomePage = ({ setPage, setSelectedArticle, setSelectedCompetition, 
           ))}
         </div>
 
-        {COMPETITIONS.length > 6 && (
+        {competitions.length > 6 && (
           <div className="mt-10 flex justify-center">
             <button onClick={() => setShowAllUpcoming((v) => !v)} className="btn-outline py-3 px-10 text-sm">
               {showAllUpcoming ? 'Voir moins' : 'Voir plus'}

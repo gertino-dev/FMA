@@ -23,7 +23,7 @@ export const DirectPage = () => (
       <div className="lg:col-span-2">
         <div className="aspect-video bg-black relative group overflow-hidden border-4 border-border-main shadow-2xl">
           <img 
-            src="/image/image%20(6).png" 
+            src="/image/WhatsApp Image 2026-04-08 at 19.31.22 (1).jpeg" 
             alt="Live Stream" 
             className="w-full h-full object-cover opacity-60"
             referrerPolicy="no-referrer"

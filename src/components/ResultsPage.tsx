@@ -4,6 +4,7 @@ import { Search, Calendar, Globe, ChevronRight } from 'lucide-react';
 
 import { Page, Competition } from '../types';
 import { getPublicDb } from '../lib/publicDb';
+import { CompetitionImage } from './CompetitionImage';
 
 interface ResultsPageProps {
   setPage: (p: Page) => void;
@@ -65,7 +66,7 @@ const ResultsPageInner = ({ setPage, setSelectedCompetition }: ResultsPageProps)
         >
           <div className="flex flex-col sm:flex-row items-center gap-6 sm:gap-8 w-full md:w-auto">
             <div className="w-20 h-20 bg-bg-surface overflow-hidden flex-shrink-0 border border-border-main">
-              <img src={comp.image} alt="" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" referrerPolicy="no-referrer" />
+              <CompetitionImage title={comp.title} alt={comp.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
             </div>
             <div className="text-center sm:text-left">
               <p className="text-brand-primary text-[10px] font-black uppercase tracking-widest mb-1">{comp.date}</p>

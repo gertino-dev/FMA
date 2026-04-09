@@ -20,7 +20,7 @@ import { ResultsDetailPage } from './components/ResultsDetailPage';
 import { NewsPage } from './components/NewsPage';
 import { LegalPage } from './components/LegalPage';
 import { AdminLoginPage } from './components/AdminLoginPage';
-import { AdminPage } from './components/AdminPage';
+import { AdminContentPage } from './components/AdminContentPage';
 
 export default function App() {
   const [loading, setLoading] = useState(true);
@@ -104,7 +104,7 @@ export default function App() {
               {page === 'programme' && <ProgramPage competition={selectedCompetition} setPage={setPage} />}
               {page === 'actualites' && <NewsPage setSelectedArticle={setSelectedArticle} setPage={setPage} />}
               {page === 'admin-login' && <AdminLoginPage setPage={setPage} />}
-              {page === 'admin' && <AdminPage setPage={setPage} />}
+              {page === 'admin' && <AdminContentPage setPage={setPage} />}
               
               {page === 'mentions' && (
                 <LegalPage 

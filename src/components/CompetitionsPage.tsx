@@ -3,6 +3,7 @@ import { motion } from 'motion/react';
 import { Calendar, Globe } from 'lucide-react';
 import { Page, Competition } from '../types';
 import { getPublicDb } from '../lib/publicDb';
+import { CompetitionImage } from './CompetitionImage';
 
 interface CompetitionsPageProps {
   setPage: (p: Page) => void;
@@ -46,7 +47,7 @@ const CompetitionsPageInner = ({ setPage, setSelectedCompetition }: Competitions
           className="flex flex-col lg:flex-row glass-card overflow-hidden group border border-border-main hover:border-brand-primary/50 transition-all"
         >
           <div className="lg:w-1/3 h-48 sm:h-64 lg:h-auto overflow-hidden">
-            <img src={comp.image} alt="" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" referrerPolicy="no-referrer" />
+            <CompetitionImage title={comp.title} alt={comp.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
           </div>
           <div className="flex-1 p-6 sm:p-8 lg:p-12 flex flex-col justify-center">
           <div className="flex flex-wrap items-center gap-3 sm:gap-4 mb-4 sm:mb-6">

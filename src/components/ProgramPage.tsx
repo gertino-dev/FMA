@@ -1,6 +1,7 @@
 import { motion } from 'motion/react';
 import { Calendar, Globe, ArrowRight, Timer, Medal, Trophy } from 'lucide-react';
 import { Page, Competition } from '../types';
+import { CompetitionImage } from './CompetitionImage';
 
 interface ProgramPageProps {
   competition: Competition | null;
@@ -28,12 +29,7 @@ export const ProgramPage = ({ competition, setPage }: ProgramPageProps) => {
           className="relative"
         >
           <div className="aspect-[4/3] overflow-hidden border-8 border-border-main shadow-2xl">
-            <img 
-              src={competition.image} 
-              alt={competition.title} 
-              className="w-full h-full object-cover"
-              referrerPolicy="no-referrer"
-            />
+            <CompetitionImage title={competition.title} alt={competition.title} className="w-full h-full object-cover" />
           </div>
           <div className="absolute -bottom-6 -right-6 glass-card p-8 shadow-2xl border-l-8 border-brand-primary">
             <div className="flex items-center gap-4 mb-4">

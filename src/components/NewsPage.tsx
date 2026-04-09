@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { motion } from 'motion/react';
 import { ArrowRight } from 'lucide-react';
 import { Page, NewsItem } from '../types';
-import { NEWS } from '../constants';
+import { getPublicDb } from '../lib/publicDb';
 
 interface NewsPageProps {
   setSelectedArticle: (a: NewsItem) => void;
@@ -11,11 +11,22 @@ interface NewsPageProps {
 
 export const NewsPage = ({ setSelectedArticle, setPage }: NewsPageProps) => {
   const [activeCategory, setActiveCategory] = useState('Tous');
-  const categories = ['Tous', 'Compétition', 'Portrait', 'Fédération', 'International'];
+  const [items, setItems] = useState<NewsItem[]>([]);
+
+  useEffect(() => {
+    getPublicDb()
+      .then((db) => setItems((db.news as NewsItem[]) ?? []))
+      .catch(() => setItems([]));
+  }, []);
+
+  const categories = useMemo(
+    () => ['Tous', ...Array.from(new Set(items.map((n) => n.category))).filter(Boolean)],
+    [items]
+  );
 
   const filteredNews = activeCategory === 'Tous' 
-    ? NEWS 
-    : NEWS.filter(item => item.category === activeCategory);
+    ? items 
+    : items.filter(item => item.category === activeCategory);
 
   return (
     <div className="pt-40 md:pt-48 pb-20 max-w-7xl mx-auto px-6 min-h-screen">

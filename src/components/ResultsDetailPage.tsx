@@ -1,6 +1,7 @@
 import { motion } from 'motion/react';
 import { ChevronLeft } from 'lucide-react';
 import { Page, Competition } from '../types';
+import { CompetitionImage } from './CompetitionImage';
 
 interface ResultsDetailPageProps {
   competition: Competition | null;
@@ -667,12 +668,7 @@ export const ResultsDetailPage = ({ competition, setPage }: ResultsDetailPagePro
           animate={{ opacity: 1, scale: 1 }}
           className="relative aspect-square lg:aspect-auto border-4 border-border-main shadow-2xl overflow-hidden"
         >
-          <img 
-            src={competition.image} 
-            alt={competition.title} 
-            className="w-full h-full object-cover"
-            referrerPolicy="no-referrer"
-          />
+          <CompetitionImage title={competition.title} alt={competition.title} className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
         </motion.div>
       </div>
@@ -738,7 +734,7 @@ export const ResultsDetailPage = ({ competition, setPage }: ResultsDetailPagePro
       {isChampionnatsAfrique && (
       <div className="space-y-14">
         {events.map((evt, idx) => (
-          <motion.section
+          <motion.section 
             key={`${evt.epreuve}-${evt.categorie}-${evt.genre}-${idx}`}
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}

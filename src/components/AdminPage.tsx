@@ -154,6 +154,74 @@ export const AdminPage = ({ setPage }: AdminPageProps) => {
   const [resultDetailsText, setResultDetailsText] = useState<string>(() => JSON.stringify({ events: [] }, null, 2));
   const [competitionsV2Text, setCompetitionsV2Text] = useState<string>(() => JSON.stringify([], null, 2));
 
+  function setCompetitionsV2Both(next: CompetitionGroupV2[]) {
+    setCompetitionsV2(next);
+    setCompetitionsV2Text(JSON.stringify(next, null, 2));
+  }
+
+  function updateCompetitionV2Group(groupId: string, patch: Partial<CompetitionGroupV2>) {
+    setCompetitionsV2Both(competitionsV2.map((g) => (g.id === groupId ? { ...g, ...patch } : g)));
+  }
+
+  function deleteCompetitionV2Group(groupId: string) {
+    if (!confirm('Supprimer ce groupe et ses sous‑compétitions ?')) return;
+    setCompetitionsV2Both(competitionsV2.filter((g) => g.id !== groupId));
+  }
+
+  function addCompetitionV2Group() {
+    const id = `g-${Date.now()}`;
+    const next: CompetitionGroupV2 = {
+      id,
+      title: 'Nouvelle compétition',
+      season: '',
+      category: 'National',
+      location: '',
+      date: '',
+      status: 'À venir',
+      image: '/image/image%20(1).png',
+      subCompetitions: [],
+    };
+    setCompetitionsV2Both([next, ...competitionsV2]);
+  }
+
+  function updateCompetitionV2Sub(groupId: string, subId: string, patch: Partial<CompetitionGroupV2['subCompetitions'][number]>) {
+    setCompetitionsV2Both(
+      competitionsV2.map((g) => {
+        if (g.id !== groupId) return g;
+        return {
+          ...g,
+          subCompetitions: g.subCompetitions.map((s) => (s.id === subId ? { ...s, ...patch } : s)),
+        };
+      })
+    );
+  }
+
+  function addCompetitionV2Sub(groupId: string) {
+    const subId = `s-${Date.now()}`;
+    setCompetitionsV2Both(
+      competitionsV2.map((g) => {
+        if (g.id !== groupId) return g;
+        return {
+          ...g,
+          subCompetitions: [
+            ...g.subCompetitions,
+            { id: subId, title: 'Sous‑compétition', date: '', location: '', status: 'À venir', category: '', image: '' },
+          ],
+        };
+      })
+    );
+  }
+
+  function deleteCompetitionV2Sub(groupId: string, subId: string) {
+    if (!confirm('Supprimer cette sous‑compétition ?')) return;
+    setCompetitionsV2Both(
+      competitionsV2.map((g) => {
+        if (g.id !== groupId) return g;
+        return { ...g, subCompetitions: g.subCompetitions.filter((s) => s.id !== subId) };
+      })
+    );
+  }
+
   useEffect(() => {
     apiFetch<{ isAdmin: boolean }>('/api/admin/me')
       .then((r) => {
@@ -581,18 +649,26 @@ export const AdminPage = ({ setPage }: AdminPageProps) => {
     setBusy(true);
     setError(null);
     try {
-      const parsed = JSON.parse(competitionsV2Text);
       const saved = await apiFetch<CompetitionGroupV2[]>('/api/admin/competitions-v2', {
         method: 'PUT',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify(parsed),
+        body: JSON.stringify(competitionsV2),
       });
-      setCompetitionsV2(saved ?? []);
-      setCompetitionsV2Text(JSON.stringify(saved ?? [], null, 2));
+      setCompetitionsV2Both(saved ?? []);
     } catch (err: any) {
-      setError(err?.message ?? 'JSON invalide / Erreur');
+      setError(err?.message ?? 'Erreur');
     } finally {
       setBusy(false);
+    }
+  }
+
+  function applyCompetitionsV2Json() {
+    try {
+      const parsed = JSON.parse(competitionsV2Text);
+      if (!Array.isArray(parsed)) throw new Error('invalid_body');
+      setCompetitionsV2(parsed as CompetitionGroupV2[]);
+    } catch (e: any) {
+      setError(e?.message ?? 'JSON invalide');
     }
   }
 
@@ -977,22 +1053,183 @@ export const AdminPage = ({ setPage }: AdminPageProps) => {
                   C’est cette structure qui correspond à “une compétition puis plein de sous‑compétitions dedans”.
                 </p>
               </div>
-              <button
-                disabled={busy}
-                onClick={saveCompetitionsV2}
-                className="btn-primary px-8 py-3 text-xs flex items-center gap-2 disabled:opacity-60"
-              >
-                <Save size={16} /> Enregistrer v2
-              </button>
+              <div className="flex flex-wrap gap-3">
+                <button
+                  disabled={busy}
+                  onClick={addCompetitionV2Group}
+                  className="btn-outline px-6 py-3 text-xs flex items-center gap-2 disabled:opacity-60"
+                >
+                  <Plus size={16} /> Ajouter un groupe
+                </button>
+                <button
+                  disabled={busy}
+                  onClick={saveCompetitionsV2}
+                  className="btn-primary px-8 py-3 text-xs flex items-center gap-2 disabled:opacity-60"
+                >
+                  <Save size={16} /> Enregistrer v2
+                </button>
+              </div>
             </div>
+
+            {competitionsV2.length === 0 ? (
+              <div className="border border-border-main bg-bg-surface/40 p-4 text-sm text-text-muted">
+                Aucun groupe v2 pour l’instant. Clique sur <b>Ajouter un groupe</b>.
+              </div>
+            ) : (
+              <div className="space-y-6 mb-8">
+                {competitionsV2.map((g) => (
+                  <div key={g.id} className="border border-border-main bg-bg-surface/30 p-5">
+                    <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1">
+                        <label className="grid gap-1">
+                          <span className="text-[10px] font-black uppercase tracking-widest text-text-muted">Titre (groupe)</span>
+                          <input
+                            value={g.title}
+                            onChange={(e) => updateCompetitionV2Group(g.id, { title: e.target.value })}
+                            className="bg-bg-main border-2 border-border-main py-2 px-4 text-sm focus:outline-none focus:border-brand-primary"
+                          />
+                        </label>
+                        <label className="grid gap-1">
+                          <span className="text-[10px] font-black uppercase tracking-widest text-text-muted">Catégorie</span>
+                          <input
+                            value={g.category}
+                            onChange={(e) => updateCompetitionV2Group(g.id, { category: e.target.value })}
+                            className="bg-bg-main border-2 border-border-main py-2 px-4 text-sm focus:outline-none focus:border-brand-primary"
+                          />
+                        </label>
+                        <label className="grid gap-1">
+                          <span className="text-[10px] font-black uppercase tracking-widest text-text-muted">Lieu</span>
+                          <input
+                            value={g.location}
+                            onChange={(e) => updateCompetitionV2Group(g.id, { location: e.target.value })}
+                            className="bg-bg-main border-2 border-border-main py-2 px-4 text-sm focus:outline-none focus:border-brand-primary"
+                          />
+                        </label>
+                        <label className="grid gap-1">
+                          <span className="text-[10px] font-black uppercase tracking-widest text-text-muted">Date</span>
+                          <input
+                            value={g.date}
+                            onChange={(e) => updateCompetitionV2Group(g.id, { date: e.target.value })}
+                            className="bg-bg-main border-2 border-border-main py-2 px-4 text-sm focus:outline-none focus:border-brand-primary"
+                          />
+                        </label>
+                        <label className="grid gap-1">
+                          <span className="text-[10px] font-black uppercase tracking-widest text-text-muted">Statut</span>
+                          <input
+                            value={g.status}
+                            onChange={(e) => updateCompetitionV2Group(g.id, { status: e.target.value })}
+                            className="bg-bg-main border-2 border-border-main py-2 px-4 text-sm focus:outline-none focus:border-brand-primary"
+                          />
+                        </label>
+                        <label className="grid gap-1">
+                          <span className="text-[10px] font-black uppercase tracking-widest text-text-muted">Image</span>
+                          <input
+                            value={g.image}
+                            onChange={(e) => updateCompetitionV2Group(g.id, { image: e.target.value })}
+                            className="bg-bg-main border-2 border-border-main py-2 px-4 text-sm focus:outline-none focus:border-brand-primary font-mono text-xs"
+                          />
+                        </label>
+                      </div>
+
+                      <div className="flex flex-wrap gap-2">
+                        <button
+                          disabled={busy}
+                          onClick={() => addCompetitionV2Sub(g.id)}
+                          className="btn-outline px-4 py-2 text-xs flex items-center gap-2 disabled:opacity-60"
+                        >
+                          <Plus size={14} /> Sous‑compétition
+                        </button>
+                        <button
+                          disabled={busy}
+                          onClick={() => deleteCompetitionV2Group(g.id)}
+                          className="btn-outline px-4 py-2 text-xs flex items-center gap-2 disabled:opacity-60"
+                        >
+                          <Trash2 size={14} /> Supprimer
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="mt-6">
+                      <div className="flex items-end justify-between gap-4 mb-3">
+                        <h3 className="text-sm font-black uppercase tracking-widest text-text-main">
+                          Sous‑compétitions ({g.subCompetitions.length})
+                        </h3>
+                      </div>
+
+                      {g.subCompetitions.length === 0 ? (
+                        <div className="text-xs text-text-muted border border-border-main/70 bg-bg-main/40 p-3">
+                          Aucune sous‑compétition.
+                        </div>
+                      ) : (
+                        <div className="space-y-3">
+                          {g.subCompetitions.map((s) => (
+                            <div key={s.id} className="border border-border-main/70 bg-bg-main/30 p-4">
+                              <div className="grid grid-cols-1 lg:grid-cols-6 gap-3 items-start">
+                                <label className="grid gap-1 lg:col-span-2">
+                                  <span className="text-[10px] font-black uppercase tracking-widest text-text-muted">Titre</span>
+                                  <input
+                                    value={s.title}
+                                    onChange={(e) => updateCompetitionV2Sub(g.id, s.id, { title: e.target.value })}
+                                    className="bg-bg-main border-2 border-border-main py-2 px-3 text-sm focus:outline-none focus:border-brand-primary"
+                                  />
+                                </label>
+                                <label className="grid gap-1">
+                                  <span className="text-[10px] font-black uppercase tracking-widest text-text-muted">Date</span>
+                                  <input
+                                    value={s.date}
+                                    onChange={(e) => updateCompetitionV2Sub(g.id, s.id, { date: e.target.value })}
+                                    className="bg-bg-main border-2 border-border-main py-2 px-3 text-sm focus:outline-none focus:border-brand-primary"
+                                  />
+                                </label>
+                                <label className="grid gap-1">
+                                  <span className="text-[10px] font-black uppercase tracking-widest text-text-muted">Lieu</span>
+                                  <input
+                                    value={s.location}
+                                    onChange={(e) => updateCompetitionV2Sub(g.id, s.id, { location: e.target.value })}
+                                    className="bg-bg-main border-2 border-border-main py-2 px-3 text-sm focus:outline-none focus:border-brand-primary"
+                                  />
+                                </label>
+                                <label className="grid gap-1">
+                                  <span className="text-[10px] font-black uppercase tracking-widest text-text-muted">Statut</span>
+                                  <input
+                                    value={s.status}
+                                    onChange={(e) => updateCompetitionV2Sub(g.id, s.id, { status: e.target.value })}
+                                    className="bg-bg-main border-2 border-border-main py-2 px-3 text-sm focus:outline-none focus:border-brand-primary"
+                                  />
+                                </label>
+                                <div className="flex gap-2 lg:justify-end">
+                                  <button
+                                    disabled={busy}
+                                    onClick={() => deleteCompetitionV2Sub(g.id, s.id)}
+                                    className="btn-outline px-4 py-2 text-xs flex items-center gap-2 disabled:opacity-60"
+                                  >
+                                    <Trash2 size={14} /> Supprimer
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
             <textarea
               value={competitionsV2Text}
               onChange={(e) => setCompetitionsV2Text(e.target.value)}
               className="w-full h-[520px] bg-bg-main border-2 border-border-main p-4 text-xs font-mono focus:outline-none focus:border-brand-primary"
             />
-            <p className="text-xs text-text-muted mt-3">
-              Exemple: un groupe avec <code className="font-mono text-[11px]">{'{ subCompetitions: [...] }'}</code>.
-            </p>
+            <div className="flex flex-wrap gap-3 mt-3 items-center">
+              <button onClick={applyCompetitionsV2Json} className="btn-outline px-6 py-2 text-xs">
+                Appliquer le JSON à l’éditeur
+              </button>
+              <p className="text-xs text-text-muted">
+                Le JSON est optionnel (avancé). Tu peux gérer tout via les formulaires au‑dessus.
+              </p>
+            </div>
           </div>
 
           <div className="glass-card p-6 sm:p-8">
