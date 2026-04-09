@@ -9,16 +9,17 @@ interface FooterProps {
 
 export const Footer = ({ setPage, setAthleteFilter }: FooterProps) => {
   const sponsorLogos = [
-    "/image%20spons/images%20(1).png",
-    "/image%20spons/images%20(2).png",
     "/image%20spons/images.jpg",
-    "/image%20spons/images.png",
-    "/image%20spons/t%C3%A9l%C3%A9chargement%20(1).jpg",
-    "/image%20spons/t%C3%A9l%C3%A9chargement%20(1).png",
-    "/image%20spons/t%C3%A9l%C3%A9chargement%20(2).jpg",
-    "/image%20spons/t%C3%A9l%C3%A9chargement%20(2).png",
-    "/image%20spons/t%C3%A9l%C3%A9chargement.jpg",
-    "/image%20spons/t%C3%A9l%C3%A9chargement.png",
+    "/image%20spons/logo-orange.png",
+    "/image%20spons/Yas_logo_2024.svg",
+  ];
+  const sponsorStrip = [
+    ...sponsorLogos,
+    ...sponsorLogos,
+    ...sponsorLogos,
+    ...sponsorLogos,
+    ...sponsorLogos,
+    ...sponsorLogos,
   ];
 
   return (
@@ -31,25 +32,15 @@ export const Footer = ({ setPage, setAthleteFilter }: FooterProps) => {
     >
     {/* Sponsors Section - Full Width Infinite Carousel */}
     <div className="mb-20 py-10 relative sponsor-marquee">
-      <div className="sponsor-track sponsor-track-a">
-        {sponsorLogos.map((src, i) => (
+      <div className="sponsor-track">
+        {[...sponsorStrip, ...sponsorStrip].map((src, i) => (
           <img
-            key={`s1-${i}`}
+            key={`s-${i}`}
             src={src}
-            alt={`Sponsor ${i + 1}`}
+            alt={`Sponsor ${((i % sponsorStrip.length) % sponsorLogos.length) + 1}`}
             className="h-12 md:h-20 w-auto object-contain"
             referrerPolicy="no-referrer"
-          />
-        ))}
-      </div>
-      <div className="sponsor-track sponsor-track-b">
-        {sponsorLogos.map((src, i) => (
-          <img
-            key={`s2-${i}`}
-            src={src}
-            alt={`Sponsor ${i + 1}`}
-            className="h-12 md:h-20 w-auto object-contain"
-            referrerPolicy="no-referrer"
+            draggable={false}
           />
         ))}
       </div>

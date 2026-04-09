@@ -85,24 +85,15 @@
   top: 50%;
   display: flex;
   align-items: center;
-  gap: 3rem;
-  transform: translateY(-50%);
+  gap: 1.75rem;
   width: max-content;
   will-change: transform;
   animation: sponsor-scroll 30s linear infinite;
 }
 
-.sponsor-track-a {
-  left: 0;
-}
-
-.sponsor-track-b {
-  left: 100%;
-}
-
 @media (min-width: 768px) {
   .sponsor-track {
-    gap: 8rem;
+    gap: 4.5rem;
   }
 }
 
@@ -111,7 +102,7 @@
     transform: translateY(-50%) translateX(0);
   }
   to {
-    transform: translateY(-50%) translateX(-100%);
+    transform: translateY(-50%) translateX(-50%);
   }
 }
 
