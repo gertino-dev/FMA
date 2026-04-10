@@ -33,7 +33,7 @@ export const AthletesPage = ({ setSelectedAthlete, setPage, initialFilter = 'Tou
     (a.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
      a.discipline.toLowerCase().includes(searchTerm.toLowerCase())) &&
     (activeFilter === 'Tous' || 
-     a.discipline.toLowerCase().includes(activeFilter.toLowerCase().replace('s', '')) ||
+     a.discipline.toLowerCase().includes(activeFilter.toLowerCase().replace('s$', '')) ||
      (activeFilter === 'Sprints' && (a.discipline.includes('100m') || a.discipline.includes('200m') || a.discipline.includes('400m'))))
   );
 

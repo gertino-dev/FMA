@@ -79,6 +79,20 @@ app.use(
   })
 );
 
+// Static assets from repo (legacy content referenced in data/db.json)
+app.use('/image', express.static(path.resolve(process.cwd(), 'image')));
+// Note: URLs in db.json use "/image%20spons/..." which decodes to "/image spons/..."
+app.use(['/image spons', '/image%20spons'], express.static(path.resolve(process.cwd(), 'image spons')));
+
+// Legacy logo referenced by the frontend as "/logo fma.png" (often requested as "/logo%20fma.png")
+const logoFilePath = path.resolve(process.cwd(), 'logo fma.png');
+app.get(['/logo fma.png', '/logo%20fma.png'], (_req, res) => {
+  res.sendFile(logoFilePath);
+});
+
+// Legacy videos referenced by the frontend as "/video/..."
+app.use('/video', express.static(path.resolve(process.cwd(), 'video')));
+
 // Static uploads (public)
 app.use('/uploads/images', express.static(path.resolve(process.cwd(), 'storage', 'uploads', 'images')));
 

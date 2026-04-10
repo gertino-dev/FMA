@@ -1,0 +1,10 @@
+node_modules
+dist
+.git
+.DS_Store
+npm-debug.log
+.env
+
+# Optional local data (keep if you want to bake initial content into image)
+# data
+# storage
