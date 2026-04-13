@@ -23,6 +23,7 @@ export interface NewsItem {
   category: string;
   date: string;
   image: string;
+  description?: string;
 }
 
 export interface Athlete {

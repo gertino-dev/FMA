@@ -17,7 +17,7 @@ import {
   Minus
 } from 'lucide-react';
 import { Page, NewsItem, Competition, Athlete } from '../types';
-import { LOCAL_MEDIA_IMAGES } from '../constants';
+import { LOCAL_MEDIA_IMAGES, RANKINGS } from '../constants';
 import { getPublicDb } from '../lib/publicDb';
 import { AthleteAvatar } from './AthleteAvatar';
 import { CompetitionImage } from './CompetitionImage';
@@ -80,10 +80,7 @@ export const HomePage = ({ setPage, setSelectedArticle, setSelectedCompetition, 
   }, []);
 
   useEffect(() => {
-    fetch('/api/public/rankings')
-      .then((r) => (r.ok ? r.json() : { tables: [] }))
-      .then((data) => setRankingsRows(data?.tables?.flatMap((t: any) => t.rows ?? []) ?? []))
-      .catch(() => setRankingsRows([]));
+    setRankingsRows(RANKINGS.tables.flatMap((t: any) => t.rows ?? []));
   }, []);
 
   return (

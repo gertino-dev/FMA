@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
 import { Search, TrendingUp, TrendingDown, Minus, ChevronRight } from 'lucide-react';
 import { Page, Athlete } from '../types';
-import { apiFetch } from '../lib/api';
+import { RANKINGS } from '../constants';
 import { getPublicDb } from '../lib/publicDb';
 import { AthleteAvatar } from './AthleteAvatar';
 
@@ -17,12 +17,8 @@ export const RankingsPage = ({ setSelectedAthlete, setPage }: RankingsPageProps)
   const [athletes, setAthletes] = useState<Athlete[]>([]);
 
   useEffect(() => {
-    apiFetch<{ tables?: Array<{ rows?: any[] }> }>('/api/public/rankings')
-      .then((r) => {
-        const rows = r?.tables?.flatMap((t) => t.rows ?? []) ?? [];
-        setRankingsRows(rows);
-      })
-      .catch(() => setRankingsRows([]));
+    const rows = RANKINGS.tables?.flatMap((t) => t.rows ?? []) ?? [];
+    setRankingsRows(rows);
   }, []);
 
   useEffect(() => {
