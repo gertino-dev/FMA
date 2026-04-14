@@ -1,19 +1,26 @@
 export const LOCAL_MEDIA_IMAGES = [
-  "/image/WhatsApp Image 2026-04-08 at 19.31.06.jpeg",
-  "/image/WhatsApp Image 2026-04-08 at 19.31.06 (1).jpeg",
-  "/image/WhatsApp Image 2026-04-08 at 19.31.06 (2).jpeg",
-  "/image/WhatsApp Image 2026-04-08 at 19.31.07.jpeg",
-  "/image/WhatsApp Image 2026-04-08 at 19.31.07 (1).jpeg",
-  "/image/WhatsApp Image 2026-04-08 at 19.31.07 (2).jpeg",
-  "/image/WhatsApp Image 2026-04-08 at 19.31.08.jpeg",
-  "/image/WhatsApp Image 2026-04-08 at 19.31.09.jpeg",
-  "/image/WhatsApp Image 2026-04-08 at 19.31.09 (1).jpeg",
-  "/image/WhatsApp Image 2026-04-08 at 19.31.09 (2).jpeg",
-  "/image/WhatsApp Image 2026-04-08 at 19.31.10.jpeg",
-  "/image/WhatsApp Image 2026-04-08 at 19.31.21.jpeg",
-  "/image/WhatsApp Image 2026-04-08 at 19.31.21 (1).jpeg",
-  "/image/WhatsApp Image 2026-04-08 at 19.31.21 (2).jpeg",
-  "/image/WhatsApp Image 2026-04-08 at 19.31.22.jpeg",
+  "/image-header/image (1).png",
+  "/image-header/image (1).jpg",
+  "/image-header/image (2).jpg",
+  "/image-header/image (3).jpg",
+  "/image-header/image (3).png",
+  "/image-header/image (4).png",
+  "/image-header/image (5).jpg",
+  "/image-header/image (5).png",
+  "/image-header/image (6).png",
+  "/image-header/image (7).jpg",
+  "/image-header/image (7).png",
+  "/image-header/image (8).png",
+  "/image-header/image (10).jpg",
+  "/image-header/image (10).png",
+  "/image-header/image (11).jpg",
+  "/image-header/image (11).png",
+  "/image-header/image (12).jpg",
+  "/image-header/image (12).png",
+  "/image-header/image (13).jpg",
+  "/image-header/image (15).png",
+  "/image-header/image (1).jpg",
+  "/image-header/image (6).png",
 ];
 
 const pickImage = (n: number) => LOCAL_MEDIA_IMAGES[(n - 1) % LOCAL_MEDIA_IMAGES.length];
@@ -32,7 +39,7 @@ export const COMPETITIONS = [
     date: "15 mars 2026",
     category: "National",
     status: "À venir",
-    image: "/image competition/TESTS épreuves pistes en vue des compétitions internationales.jpg"
+    image: "/image-competition/TESTS épreuves pistes en vue des compétitions internationales.jpg"
   },
   {
     id: 202602,
@@ -41,7 +48,7 @@ export const COMPETITIONS = [
     date: "20 au 22 mars 2026",
     category: "International",
     status: "À venir",
-    image: "/image competition/Championnat du monde en salle.jpg"
+    image: "/image-competition/Championnat du monde en salle.jpg"
   },
   {
     id: 202603,
@@ -50,7 +57,7 @@ export const COMPETITIONS = [
     date: "20 avril 2026",
     category: "International",
     status: "À venir",
-    image: "/image competition/Meeting St Denis.jpg"
+    image: "/image-competition/Meeting St Denis.jpg"
   },
   {
     id: 202604,
@@ -59,7 +66,7 @@ export const COMPETITIONS = [
     date: "26 avril 2026",
     category: "National",
     status: "À venir",
-    image: "/image competition/Course sur route « La vache qui rit » (2km, 4km, 15km).jpg"
+    image: "/image-competition/Course sur route « La vache qui rit » (2km, 4km, 15km).jpg"
   },
   {
     id: 202605,
@@ -68,7 +75,7 @@ export const COMPETITIONS = [
     date: "1 au 3 mai 2026",
     category: "National",
     status: "À venir",
-    image: "/image competition/Championnats de Madagascar Trails (Court et Long) — UTOP.jpeg"
+    image: "/image-competition/Championnats de Madagascar Trails (Court et Long) — UTOP.jpeg"
   },
   {
     id: 202606,
@@ -77,7 +84,7 @@ export const COMPETITIONS = [
     date: "12 au 17 mai 2026",
     category: "International",
     status: "À venir",
-    image: "/image competition/24e Championnats d'Afrique seniors.jpg"
+    image: "/image-competition/24e Championnats d'Afrique seniors.jpg"
   },
   {
     id: 202607,
@@ -86,7 +93,7 @@ export const COMPETITIONS = [
     date: "05 au 07 juin 2026",
     category: "International",
     status: "À venir",
-    image: "/image competition/SACA Championnats d'Afrique Austral U18  U20.png"
+    image: "/image-competition/SACA Championnats d'Afrique Austral U18  U20.png"
   },
   {
     id: 202608,
@@ -95,7 +102,7 @@ export const COMPETITIONS = [
     date: "31 juillet au 02 août 2026",
     category: "National",
     status: "À venir",
-    image: "/image competition/Championnats de Madagascar Jeunes Piste.png"
+    image: "/image-competition/Championnats de Madagascar Jeunes Piste.png"
   },
   {
     id: 202609,
@@ -104,7 +111,7 @@ export const COMPETITIONS = [
     date: "07 au 09 août 2026",
     category: "National",
     status: "À venir",
-    image: "/image competition/Championnats de Madagascar Séniors + Épreuves combinées (Piste).jpg"
+    image: "/image-competition/Championnats de Madagascar Séniors + Épreuves combinées (Piste).jpg"
   },
   {
     id: 202610,
@@ -113,7 +120,7 @@ export const COMPETITIONS = [
     date: "30 août 2026",
     category: "National",
     status: "À venir",
-    image: "/image competition/Sémi-marathon VIMA.jpg"
+    image: "/image-competition/Sémi-marathon VIMA.jpg"
   },
   {
     id: 202611,
@@ -122,7 +129,7 @@ export const COMPETITIONS = [
     date: "10 au 11 octobre 2026",
     category: "National",
     status: "À venir",
-    image: "/image competition/Marathon International.png"
+    image: "/image-competition/Marathon International.png"
   },
   {
     id: 202612,
@@ -131,7 +138,7 @@ export const COMPETITIONS = [
     date: "31 octobre au 13 novembre 2026",
     category: "International",
     status: "À venir",
-    image: "/image competition/4e Youth Olympic Games.jpg"
+    image: "/image-competition/4e Youth Olympic Games.jpg"
   },
   {
     id: 202613,
@@ -140,7 +147,7 @@ export const COMPETITIONS = [
     date: "11 novembre 2026",
     category: "International",
     status: "À venir",
-    image: "/image competition/Relais Marathon St Benoit.jpg"
+    image: "/image-competition/Relais Marathon St Benoit.jpg"
   }
 ];
 
@@ -181,35 +188,35 @@ export const NEWS = [
     title: "Succès des Championnats d'Afrique SACA Région Sud U18/U20 - Maurice",
     category: "Championnats",
     date: "14-15 mars 2026",
-    image: "/image actualité/Succès des Championnats d'Afrique SACA Région Sud U18U20 - Maurice.png"
+    image: "/image-actualite/Succès des Championnats d'Afrique SACA Région Sud U18U20 - Maurice.png"
   },
   {
     id: 2,
     title: "Sélectionnaires malgaches brillent aux Championnats d'Afrique - Accra Ghana",
     category: "Performance",
     date: "14-15 mars 2026",
-    image: "/image actualité/Sélectionnaires malgaches brillent aux Championnats d'Afrique - Accra Ghana.jpg"
+    image: "/image-actualite/Sélectionnaires malgaches brillent aux Championnats d'Afrique - Accra Ghana.jpg"
   },
   {
     id: 3,
     title: "Résultats Tests U18/U20 - Ordre de mérite établi",
     category: "Sélection",
     date: "14-15 mars 2026",
-    image: "/image actualité/Résultats Tests U18U20 - Ordre de mérite établi.jpeg"
+    image: "/image-actualite/Résultats Tests U18U20 - Ordre de mérite établi.jpeg"
   },
   {
     id: 4,
     title: "Madagascar excelle dans les épreuves de piste en 2026",
     category: "National",
     date: "8 avril 2026",
-    image: "/image actualité/Madagascar excelle dans les épreuves de piste en 2026.jpg"
+    image: "/image-actualite/Madagascar excelle dans les épreuves de piste en 2026.jpg"
   },
   {
     id: 5,
     title: "Préparation intense pour les compétitions internationales à venir",
     category: "Préparation",
     date: "2026",
-    image: "/image actualité/Préparation intense pour les compétitions internationales à venir.jpg"
+    image: "/image-actualite/Préparation intense pour les compétitions internationales à venir.jpg"
   }
 ];
 
@@ -222,7 +229,7 @@ export const ATHLETES = [
     discipline: "100m Haies",
     rank: 1,
     performance: "12.85s",
-    image: "/image athlete/Sidonie Fiadanantsoa.jpg"
+    image: "/image-athlete/Sidonie Fiadanantsoa.jpg"
   },
   {
     id: 2,
@@ -232,7 +239,7 @@ export const ATHLETES = [
     discipline: "100m / 200m",
     rank: 2,
     performance: "11.42s / 23.45s",
-    image: "/image athlete/Claudine Nomenjanahary.jpg"
+    image: "/image-athlete/Claudine Nomenjanahary.jpg"
   },
   {
     id: 3,
@@ -1020,19 +1027,19 @@ export const SPONSORS = [
   {
     id: "images-jpg",
     name: "Sponsor",
-    logo: "/image%20spons/images.jpg",
+    logo: "/image-spons/images.jpg",
     order: 1
   },
   {
     id: "logo-orange-png",
     name: "Sponsor",
-    logo: "/image%20spons/logo-orange.png",
+    logo: "/image-spons/logo-orange.png",
     order: 2
   },
   {
     id: "yas-logo-2024-svg",
     name: "Sponsor",
-    logo: "/image%20spons/Yas_logo_2024.svg",
+    logo: "/image-spons/Yas_logo_2024.svg",
     order: 3
   }
 ];
@@ -1046,7 +1053,7 @@ export const HOME = {
         id: "hero-1",
         title: "Dépassez les limites.",
         subtitle: "Fédération Malagasy d'Athlétisme",
-        image: "/image header/image (6).png",
+        image: "/image-header/image (6).png",
         cta: {
           label: "Voir le calendrier",
           to: "competitions"
@@ -1079,7 +1086,7 @@ export const HOME = {
         id: "yt-1",
         title: "Highlights 2026",
         youtubeId: "",
-        poster: "/image header/image (1).png"
+        poster: "/image-header/image (1).png"
       }
     ]
   }

@@ -10,12 +10,12 @@ type Props = {
 function candidates(name: string): string[] {
   const base = name.trim();
   return [
-    `/athletes-pdp/${base}.jpg`,
-    `/athletes-pdp/${base}.png`,
-    `/athletes-pdp/${encodeURIComponent(base)}.jpg`,
-    `/athletes-pdp/${encodeURIComponent(base)}.png`,
-    '/athletes-pdp/unknow.png',
-    '/athletes-pdp/unknow.jpg',
+    `/image-athlete/${base}.jpg`,
+    `/image-athlete/${base}.png`,
+    `/image-athlete/${encodeURIComponent(base)}.jpg`,
+    `/image-athlete/${encodeURIComponent(base)}.png`,
+    '/image-athlete/unknow.png',
+    '/image-athlete/unknow.jpg',
   ];
 }
 

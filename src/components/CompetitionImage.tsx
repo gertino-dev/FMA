@@ -11,14 +11,14 @@ function buildCandidates(title: string): string[] {
   const base = title.trim();
   const encoded = encodeURIComponent(base);
   return [
-    `/compétition/${base}.jpg`,
-    `/compétition/${base}.png`,
-    `/compétition/${base}.jpeg`,
-    `/compétition/${encoded}.jpg`,
-    `/compétition/${encoded}.png`,
-    `/compétition/${encoded}.jpeg`,
-    '/compétition/unknow.jpg',
-    '/compétition/unknow.png',
+    `/image-competition/${base}.jpg`,
+    `/image-competition/${base}.png`,
+    `/image-competition/${base}.jpeg`,
+    `/image-competition/${encoded}.jpg`,
+    `/image-competition/${encoded}.png`,
+    `/image-competition/${encoded}.jpeg`,
+    '/image-competition/unknow.jpg',
+    '/image-competition/unknow.png',
   ];
 }
 
