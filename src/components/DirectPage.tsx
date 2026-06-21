@@ -38,8 +38,8 @@ export const DirectPage = () => (
             </motion.button>
           </div>
           <div className="absolute top-4 left-4 md:top-6 md:left-6 flex flex-wrap gap-2 md:gap-3">
-            <span className="bg-brand-primary text-white text-[8px] md:text-[10px] font-black uppercase tracking-widest px-2 md:px-3 py-1 shadow-lg">En Direct</span>
-            <span className="bg-black/50 backdrop-blur-md text-white text-[8px] md:text-[10px] font-black uppercase tracking-widest px-2 md:px-3 py-1 flex items-center gap-1 md:gap-2 border border-white/20 shadow-lg">
+            <span className="bg-brand-primary text-white text-[9px] md:text-[10px] font-black uppercase tracking-widest px-2 md:px-3 py-1 shadow-lg">En Direct</span>
+            <span className="bg-black/50 backdrop-blur-md text-white text-[9px] md:text-[10px] font-black uppercase tracking-widest px-2 md:px-3 py-1 flex items-center gap-1 md:gap-2 border border-white/20 shadow-lg">
               <Users size={10} className="md:w-3 md:h-3" /> 1,245 spectateurs
             </span>
           </div>

@@ -5,10 +5,11 @@ import { Page, Athlete } from '../types';
 import { RANKINGS } from '../constants';
 import { getPublicDb } from '../lib/publicDb';
 import { AthleteAvatar } from './AthleteAvatar';
+import { PageHeader } from './ui/SectionHeader';
 
 interface RankingsPageProps {
   setSelectedAthlete: (a: Athlete) => void;
-  setPage: (p: Page) => void;
+  setPage: (p: Page, opts?: { athleteId?: number }) => void;
 }
 
 export const RankingsPage = ({ setSelectedAthlete, setPage }: RankingsPageProps) => {
@@ -50,42 +51,28 @@ export const RankingsPage = ({ setSelectedAthlete, setPage }: RankingsPageProps)
   return (
     <div className="pt-40 md:pt-48 pb-20 max-w-7xl mx-auto px-6 min-h-screen">
       {/* Header Section */}
-      <motion.div 
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-        className="mb-16 flex flex-col lg:row justify-between items-start lg:items-end gap-8"
-      >
-        <div className="relative">
-          <motion.div 
-            initial={{ width: 0 }}
-            animate={{ width: '100px' }}
-            className="h-1 bg-brand-primary mb-4"
-          />
-          <h1 className="text-5xl sm:text-7xl font-display font-black italic uppercase tracking-tighter mb-4 leading-none">
-            Classements <span className="text-brand-primary">Elite</span>
-          </h1>
-          <p className="text-text-muted text-lg max-w-xl">
-            Classements par catégorie + épreuve (ex: Senior Hommes 400m Plat, Senior Dames 100m).
-          </p>
-          {qCategory && (
-            <p className="text-xs text-brand-primary font-black uppercase tracking-widest mt-3">
-              Filtre actif: top 3 par catégorie
-            </p>
-          )}
-        </div>
-        
-        <div className="flex flex-col sm:flex-row gap-4 w-full lg:w-auto">
-          <div className="relative flex-1 sm:w-64">
+      <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} className="mb-12">
+        <PageHeader
+          eyebrow="Performances"
+          title="Classements Elite"
+          description="Classements par catégorie et épreuve — Senior Hommes, Senior Dames, U18, U20…"
+        />
+        <div className="mt-6 max-w-md">
+          <div className="relative">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-text-muted" size={16} />
             <input
               type="text"
-              placeholder="Filtrer une catégorie (ex: senior hommes 400m)"
+              placeholder="Filtrer une catégorie…"
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}
-              className="w-full bg-bg-surface border border-border-main py-3 pl-12 pr-4 text-sm focus:outline-none focus:border-brand-primary text-text-main rounded-none -skew-x-12"
+              className="input-modern"
             />
           </div>
+          {qCategory && (
+            <p className="text-xs text-brand-primary font-semibold uppercase tracking-widest mt-3">
+              Filtre actif · top 3 par catégorie
+            </p>
+          )}
         </div>
       </motion.div>
 
@@ -93,10 +80,12 @@ export const RankingsPage = ({ setSelectedAthlete, setPage }: RankingsPageProps)
       <div className="space-y-10">
         {filteredGroups.map((group) => (
           <div key={group.label} className="space-y-4">
-            <h3 className="text-xl font-display font-black italic uppercase tracking-tight border-l-4 border-brand-primary pl-4">
+            <h3 className="text-lg font-display font-bold uppercase tracking-tight flex items-center gap-3">
+              <span className="w-1 h-6 bg-brand-primary shrink-0" />
               {group.label}
             </h3>
-            <div className="grid grid-cols-12 px-8 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-text-muted">
+            {/* Desktop table header */}
+            <div className="hidden md:grid grid-cols-12 px-6 lg:px-8 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-text-muted">
               <div className="col-span-1">Rang</div>
               <div className="col-span-5">Athlète</div>
               <div className="col-span-2 text-center">Épreuve</div>
@@ -104,64 +93,97 @@ export const RankingsPage = ({ setSelectedAthlete, setPage }: RankingsPageProps)
               <div className="col-span-2 text-right">Tendance</div>
             </div>
 
-            {group.rows.map((row, i) => (
-              <motion.div
-                key={`${group.label}-${row.id}-${i}`}
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.05 }}
-                onClick={() => {
-                  const athlete = athletes.find(a => a.name === row.athlete);
-                  if (athlete) { setSelectedAthlete(athlete); setPage('athlete-profile'); }
-                }}
-                className="group cursor-pointer bg-bg-surface border border-border-main hover:border-brand-primary transition-all p-1"
-              >
-                <div className="grid grid-cols-12 items-center px-8 py-4 bg-bg-main/50 group-hover:bg-bg-surface transition-colors">
-                  <div className="col-span-1">
-                    <span className="text-2xl font-display font-black italic text-text-muted group-hover:text-brand-primary transition-colors">#{i + 1}</span>
+            {group.rows.map((row, i) => {
+              const openProfile = () => {
+                const athlete = athletes.find((a) => a.name === row.athlete);
+                if (athlete) {
+                  setSelectedAthlete(athlete);
+                  setPage('athlete-profile', { athleteId: athlete.id });
+                }
+              };
+
+              const trendEl =
+                row.trend === 'up' ? (
+                  <div className="flex items-center gap-1 text-green-500">
+                    <TrendingUp size={14} aria-hidden />
+                    <span className="text-[10px] font-black">+12</span>
                   </div>
-                  <div className="col-span-5 flex items-center gap-4">
-                    <div className="w-12 h-12 bg-bg-surface overflow-hidden border border-border-main">
+                ) : row.trend === 'down' ? (
+                  <div className="flex items-center gap-1 text-brand-primary">
+                    <TrendingDown size={14} aria-hidden />
+                    <span className="text-[10px] font-black">-4</span>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-1 text-text-muted">
+                    <Minus size={14} aria-hidden />
+                    <span className="text-[10px] font-black">0</span>
+                  </div>
+                );
+
+              return (
+                <motion.button
+                  key={`${group.label}-${row.id}-${i}`}
+                  type="button"
+                  initial={{ opacity: 0, y: 12 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.04 }}
+                  onClick={openProfile}
+                  className="group w-full text-left cursor-pointer card card-hover active:scale-[0.99]"
+                >
+                  {/* Mobile card */}
+                  <div className="md:hidden p-4 flex items-center gap-4">
+                    <div className="shrink-0 w-10 text-center">
+                      <span className={`text-2xl font-display font-black italic ${i === 0 ? 'text-brand-primary' : 'text-text-muted'}`}>
+                        #{i + 1}
+                      </span>
+                    </div>
+                    <div className="w-14 h-14 shrink-0 overflow-hidden border border-border-main">
                       <AthleteAvatar name={row.athlete} alt={row.athlete} className="w-full h-full object-cover" />
                     </div>
-                    <div>
-                      <h4 className="font-black uppercase tracking-tight text-text-main group-hover:text-brand-primary transition-colors">{row.athlete}</h4>
-                      <p className="text-[10px] text-text-muted uppercase tracking-widest">{row.country}</p>
+                    <div className="flex-1 min-w-0">
+                      <h4 className="font-bold uppercase tracking-tight text-sm text-text-main group-hover:text-brand-primary transition-colors truncate">
+                        {row.athlete}
+                      </h4>
+                      <p className="text-[9px] text-text-muted uppercase tracking-widest mt-0.5">{row.discipline}</p>
+                      <div className="flex items-center gap-3 mt-2">
+                        <span className="text-base font-mono font-black text-text-main">{row.points} pts</span>
+                        {trendEl}
+                      </div>
+                    </div>
+                    <ChevronRight size={18} className="text-text-muted shrink-0 group-hover:text-brand-primary transition-colors" />
+                  </div>
+
+                  {/* Desktop row */}
+                  <div className="hidden md:grid grid-cols-12 items-center px-6 lg:px-8 py-4 bg-bg-main/50 group-hover:bg-bg-surface transition-colors">
+                    <div className="col-span-1">
+                      <span className="text-2xl font-display font-black italic text-text-muted group-hover:text-brand-primary transition-colors">#{i + 1}</span>
+                    </div>
+                    <div className="col-span-5 flex items-center gap-4">
+                      <div className="w-12 h-12 bg-bg-surface overflow-hidden border border-border-main shrink-0">
+                        <AthleteAvatar name={row.athlete} alt={row.athlete} className="w-full h-full object-cover" />
+                      </div>
+                      <div className="min-w-0">
+                        <h4 className="font-black uppercase tracking-tight text-text-main group-hover:text-brand-primary transition-colors truncate">{row.athlete}</h4>
+                        <p className="text-[10px] text-text-muted uppercase tracking-widest">{row.country}</p>
+                      </div>
+                    </div>
+                    <div className="col-span-2 text-center">
+                      <span className="inline-block px-3 py-1 bg-bg-surface border border-border-main text-[9px] font-bold uppercase tracking-widest">
+                        {row.discipline}
+                      </span>
+                    </div>
+                    <div className="col-span-2 text-center">
+                      <span className="text-lg font-mono font-black text-text-main">{row.points}</span>
+                    </div>
+                    <div className="col-span-2 flex justify-end items-center gap-3">
+                      {trendEl}
+                      <ChevronRight size={16} className="text-text-muted group-hover:text-brand-primary group-hover:translate-x-1 transition-all" />
                     </div>
                   </div>
-                  <div className="col-span-2 text-center">
-                    <span className="inline-block px-3 py-1 bg-bg-surface border border-border-main text-[9px] font-bold uppercase tracking-widest -skew-x-12">
-                      <span className="skew-x-12 inline-block">{row.discipline}</span>
-                    </span>
-                  </div>
-                  <div className="col-span-2 text-center">
-                    <span className="text-lg font-mono font-black text-text-main">{row.points}</span>
-                  </div>
-                  <div className="col-span-2 flex justify-end items-center gap-3">
-                    <div className="flex flex-col items-end">
-                      {row.trend === 'up' ? (
-                        <div className="flex items-center gap-1 text-green-500">
-                          <TrendingUp size={14} />
-                          <span className="text-[10px] font-black">+12</span>
-                        </div>
-                      ) : row.trend === 'down' ? (
-                        <div className="flex items-center gap-1 text-brand-primary">
-                          <TrendingDown size={14} />
-                          <span className="text-[10px] font-black">-4</span>
-                        </div>
-                      ) : (
-                        <div className="flex items-center gap-1 text-text-muted">
-                          <Minus size={14} />
-                          <span className="text-[10px] font-black">0</span>
-                        </div>
-                      )}
-                    </div>
-                    <ChevronRight size={16} className="text-text-muted group-hover:text-brand-primary group-hover:translate-x-1 transition-all" />
-                  </div>
-                </div>
-              </motion.div>
-            ))}
+                </motion.button>
+              );
+            })}
           </div>
         ))}
       </div>

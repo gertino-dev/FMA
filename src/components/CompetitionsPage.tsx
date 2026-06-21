@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
 import { Calendar, Globe } from 'lucide-react';
-import { Page, Competition } from '../types';
+import { Competition, SetPageFn } from '../types';
 import { getPublicDb } from '../lib/publicDb';
 import { CompetitionImage } from './CompetitionImage';
 
 interface CompetitionsPageProps {
-  setPage: (p: Page) => void;
+  setPage: SetPageFn;
   setSelectedCompetition: (c: Competition) => void;
 }
 
@@ -65,7 +65,7 @@ const CompetitionsPageInner = ({ setPage, setSelectedCompetition }: Competitions
                   <Calendar size={20} className="sm:w-6 sm:h-6" />
                 </div>
                 <div>
-                  <p className="text-text-muted text-[8px] sm:text-[10px] uppercase tracking-widest mb-1">Date</p>
+                  <p className="text-text-muted text-[9px] sm:text-[10px] uppercase tracking-widest mb-1">Date</p>
                   <p className="text-sm sm:text-base font-bold">{comp.date}</p>
                 </div>
               </div>
@@ -74,29 +74,23 @@ const CompetitionsPageInner = ({ setPage, setSelectedCompetition }: Competitions
                   <Globe size={20} className="sm:w-6 sm:h-6" />
                 </div>
                 <div>
-                  <p className="text-text-muted text-[8px] sm:text-[10px] uppercase tracking-widest mb-1">Lieu</p>
+                  <p className="text-text-muted text-[9px] sm:text-[10px] uppercase tracking-widest mb-1">Lieu</p>
                   <p className="text-sm sm:text-base font-bold">{comp.location}</p>
                 </div>
               </div>
             </div>
             <div className="flex flex-col sm:flex-row gap-4">
               <button 
-                onClick={() => {
-                  setSelectedCompetition(comp);
-                  setPage('billetterie');
-                }}
-                className="btn-primary px-8 py-3 text-sm"
-              >
-                Billetterie
-              </button>
-              <button 
-                onClick={() => {
-                  setSelectedCompetition(comp);
-                  setPage('programme');
-                }}
-                className="btn-outline px-8 py-3 text-sm"
+                onClick={() => setPage('programme', { competitionId: comp.id })}
+                className="btn-primary px-8 py-3 text-sm w-full sm:w-auto"
               >
                 Programme
+              </button>
+              <button 
+                onClick={() => setPage('billetterie', { competitionId: comp.id })}
+                className="btn-outline px-8 py-3 text-sm w-full sm:w-auto"
+              >
+                Billetterie
               </button>
             </div>
           </div>

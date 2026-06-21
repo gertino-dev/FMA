@@ -39,6 +39,8 @@ export function CompetitionImage({ title, alt, className }: Props) {
       src={urls[index]}
       alt={alt ?? title}
       className={className}
+      loading="lazy"
+      decoding="async"
       onError={() => setIndex((i) => i + 1)}
       referrerPolicy="no-referrer"
     />

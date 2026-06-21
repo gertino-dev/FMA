@@ -51,15 +51,6 @@ export const COMPETITIONS = [
     image: "/image-competition/Championnat du monde en salle.jpg"
   },
   {
-    id: 202603,
-    title: "Meeting St Denis",
-    location: "La Réunion",
-    date: "20 avril 2026",
-    category: "International",
-    status: "À venir",
-    image: "/image-competition/Meeting St Denis.jpg"
-  },
-  {
     id: 202604,
     title: "Course sur route « La vache qui rit » (2km, 4km, 15km)",
     location: "Antananarivo (Tana)",
@@ -176,6 +167,14 @@ export const RESULTS = [
 
 export const NEWS = [
   {
+    id: 1,
+    title: "Succès des Championnats d'Afrique SACA Région Sud U18/U20 - Maurice",
+    category: "Championnats",
+    date: "14-15 mars 2026",
+    image: "/image-actualite/Succès des Championnats d'Afrique SACA Région Sud U18U20 - Maurice.png",
+    description: "Les jeunes athlètes malgaches ne rentrent pas bredouilles des Championnats d'Afrique australe dans les catégories U18 et U20 qui se sont déroulés à Maurice. La délégation malgache a remporté trois médailles, dont une en or, une en argent et une en bronze, rapporte la Fédération Malagasy d'Athlétisme.\n\nNy Aina Anna Andrianjafy a été l'athlète la plus performante avec un titre de championne d'Afrique australe sur la distance de 400m haies dans la catégorie U20 filles. En plus de la médaille d'or remportée, elle a également décroché la troisième place en 400m plat, toujours dans la catégorie U20 filles. La troisième médaille, en argent, a été remportée par Fabrice Ratovoarimonja sur 200m U18 garçons.\n\nDe nombreux jeunes malgaches ont profité de cette compétition régionale pour améliorer leurs performances personnelles. Ils étaient six athlètes à avoir représenté Madagascar à Maurice."
+  },
+  {
     id: 0,
     title: "Ny 1000 voalohany misoratra anarana dia hahazo tee-shirt La Vache Qui Rit",
     category: "Inscription",
@@ -184,39 +183,36 @@ export const NEWS = [
     description: "Une belle opportunité pour les participants de repartir avec un cadeau spécial lors des inscriptions.|MAIN|La Fédération Malagasy d'Athlétisme annonce une offre exceptionnelle à l'occasion des inscriptions : les 1000 premiers inscrits recevront un tee-shirt offert par La Vache Qui Rit. Cette initiative vise à encourager une participation massive et à motiver encore davantage les passionnés d'athlétisme à rejoindre l'événement.\n\nL'inscription se fait exclusivement en ligne, afin de faciliter l'organisation et d'assurer une meilleure gestion des participants. Pour accompagner le public dans cette démarche, une assistance est disponible au Kiosque Ortana – Jardin d'Antaninarenina ainsi qu'au Stade Alarobia FMA.|CARDS|Infolines|Les participants peuvent obtenir plus d'informations via l'adresse mail lvqrrun@gmail.com ou en appelant les numéros +261 34 17 827 07 et +261 34 19 677 53.|CARD_SEP|Inscription en ligne|Un QR code est également mis à disposition sur l'affiche pour permettre un accès rapide à la plateforme d'inscription.|END_CARDS|Cette campagne traduit la volonté de la FMA et de ses partenaires de rendre l'événement plus attractif, tout en valorisant l'engagement des premiers participants. Une opération dynamique qui promet un bel engouement autour de cette activité."
   },
   {
-    id: 1,
-    title: "Succès des Championnats d'Afrique SACA Région Sud U18/U20 - Maurice",
-    category: "Championnats",
-    date: "14-15 mars 2026",
-    image: "/image-actualite/Succès des Championnats d'Afrique SACA Région Sud U18U20 - Maurice.png"
-  },
-  {
     id: 2,
     title: "Sélectionnaires malgaches brillent aux Championnats d'Afrique - Accra Ghana",
     category: "Performance",
     date: "14-15 mars 2026",
-    image: "/image-actualite/Sélectionnaires malgaches brillent aux Championnats d'Afrique - Accra Ghana.jpg"
+    image: "/image-actualite/Sélectionnaires malgaches brillent aux Championnats d'Afrique - Accra Ghana.jpg",
+    description: "Les sélectionnaires malgaches ont brillé lors des Championnats d'Afrique à Accra, au Ghana. La délégation a confirmé le haut niveau de l'athlétisme national sur la scène continentale, avec des performances remarquables en sprint et en demi-fond.\n\nCes résultats renforcent la confiance de la Fédération Malagasy d'Athlétisme dans la préparation des prochaines échéances internationales et valorisent le travail des encadreurs sur tout le territoire."
   },
   {
     id: 3,
     title: "Résultats Tests U18/U20 - Ordre de mérite établi",
     category: "Sélection",
     date: "14-15 mars 2026",
-    image: "/image-actualite/Résultats Tests U18U20 - Ordre de mérite établi.jpeg"
+    image: "/image-actualite/Résultats Tests U18U20 - Ordre de mérite établi.jpeg",
+    description: "Les tests de sélection U18 et U20 ont permis d'établir l'ordre de mérite officiel pour la saison 2026. De nombreux jeunes talents ont montré une progression significative sur piste et sur le terrain.\n\nLa FMA utilisera ces résultats pour constituer les équipes nationales et orienter le programme de préparation vers les championnats régionaux et continentaux."
   },
   {
     id: 4,
     title: "Madagascar excelle dans les épreuves de piste en 2026",
     category: "National",
     date: "8 avril 2026",
-    image: "/image-actualite/Madagascar excelle dans les épreuves de piste en 2026.jpg"
+    image: "/image-actualite/Madagascar excelle dans les épreuves de piste en 2026.jpg",
+    description: "L'athlétisme malagasy confirme sa montée en puissance sur les épreuves de piste en 2026. Sprinteurs et demi-fondeurs enregistrent des chronos et des performances qui rapprochent le pays des standards internationaux.\n\nCette dynamique s'inscrit dans la politique de développement de la FMA, qui investit dans la détection des jeunes et l'organisation de compétitions sur l'ensemble des ligues régionales."
   },
   {
     id: 5,
     title: "Préparation intense pour les compétitions internationales à venir",
     category: "Préparation",
     date: "2026",
-    image: "/image-actualite/Préparation intense pour les compétitions internationales à venir.jpg"
+    image: "/image-actualite/Préparation intense pour les compétitions internationales à venir.jpg",
+    description: "Les athlètes malgaches engagés dans les compétitions internationales poursuivent une préparation intensive sous l'égide de la FMA. Stages, tests et séances techniques rythment le calendrier avant les prochains rendez-vous continentaux.\n\nL'objectif est clair : arriver en forme optimale et porter haut les couleurs de Madagascar sur la scène africaine et mondiale."
   }
 ];
 

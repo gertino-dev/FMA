@@ -1,80 +1,198 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;0,800;0,900;1,700;1,800;1,900&family=Inter:wght@300;400;500;600;700&display=swap');
 @import "tailwindcss";
 
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Outfit", sans-serif;
-  
-  --color-brand-primary: #e11d48; /* Rose-600 */
-  --color-brand-secondary: #10b981; /* Emerald-500 */
-  
-  /* Theme Variables */
+  --font-display: "Barlow Condensed", sans-serif;
+
+  --color-brand-primary: #c8102e;
+  --color-brand-secondary: #007749;
+  --color-brand-primary-soft: #fdf2f4;
+
   --color-bg-main: var(--bg-main);
   --color-bg-surface: var(--bg-surface);
+  --color-bg-elevated: var(--bg-elevated);
   --color-text-main: var(--text-main);
   --color-text-muted: var(--text-muted);
   --color-border-main: var(--border-main);
+
+  --shadow-card: 0 1px 3px rgba(15, 23, 42, 0.06), 0 8px 24px rgba(15, 23, 42, 0.04);
+  --shadow-card-hover: 0 4px 12px rgba(15, 23, 42, 0.08), 0 16px 40px rgba(200, 16, 46, 0.08);
+  --shadow-nav: 0 4px 30px rgba(15, 23, 42, 0.06);
 }
 
 :root {
-  --bg-main: #f8fafc;
+  --bg-main: #f4f6f9;
   --bg-surface: #ffffff;
-  --text-main: #0f172a;
-  --text-muted: #64748b;
-  --border-main: #e2e8f0;
+  --bg-elevated: #ffffff;
+  --text-main: #0c1222;
+  --text-muted: #5c6b7f;
+  --border-main: #e4e9f0;
 }
 
 .dark {
-  --bg-main: #0a0a0a;
-  --bg-surface: #171717;
-  --text-main: #ffffff;
-  --text-muted: rgba(255, 255, 255, 0.5);
-  --border-main: rgba(255, 255, 255, 0.1);
+  --bg-main: #09090b;
+  --bg-surface: #141416;
+  --bg-elevated: #1c1c1f;
+  --text-main: #f8fafc;
+  --text-muted: rgba(248, 250, 252, 0.55);
+  --border-main: rgba(255, 255, 255, 0.09);
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.2);
+  --shadow-card-hover: 0 4px 12px rgba(0, 0, 0, 0.35), 0 16px 40px rgba(200, 16, 46, 0.12);
 }
 
 @layer base {
   body {
     @apply bg-bg-main text-text-main font-sans antialiased transition-colors duration-300;
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(200, 16, 46, 0.04), transparent),
+      radial-gradient(ellipse 60% 40% at 100% 0%, rgba(0, 119, 73, 0.03), transparent);
   }
-  
+
+  .dark body {
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(200, 16, 46, 0.08), transparent),
+      radial-gradient(ellipse 60% 40% at 100% 0%, rgba(0, 119, 73, 0.05), transparent);
+  }
+
   h1, h2, h3, h4, h5, h6 {
     @apply font-display font-bold tracking-tight text-text-main;
   }
+
+  ::selection {
+    @apply bg-brand-primary text-white;
+  }
 }
 
-.glass-card {
-  @apply bg-bg-surface/95 border border-border-main shadow-2xl;
+/* ─── Typography ─── */
+.eyebrow {
+  @apply inline-flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.28em] text-brand-primary mb-4;
 }
 
+.eyebrow::before {
+  content: '';
+  @apply w-5 h-0.5 bg-brand-primary rounded-full shrink-0;
+}
+
+.page-title {
+  @apply text-3xl md:text-[2.75rem] font-display font-bold uppercase tracking-tight leading-[1.05];
+}
+
+.page-title-lg {
+  @apply text-4xl sm:text-6xl md:text-7xl font-display font-bold uppercase tracking-tight leading-[0.95];
+}
+
+.page-header-wrap {
+  @apply mb-10 md:mb-12;
+}
+
+/* ─── Cards ─── */
+.glass-card,
+.card {
+  @apply bg-bg-surface border border-border-main/80 transition-all duration-300;
+  box-shadow: var(--shadow-card);
+}
+
+.card-hover {
+  @apply hover:-translate-y-0.5 hover:border-brand-primary/25;
+}
+
+.card-hover:hover {
+  box-shadow: var(--shadow-card-hover);
+}
+
+.stat-card {
+  @apply relative overflow-hidden bg-bg-surface border border-border-main/70 p-6 md:p-7 transition-all duration-300;
+  box-shadow: var(--shadow-card);
+}
+
+.stat-card:hover {
+  box-shadow: var(--shadow-card-hover);
+  @apply border-brand-primary/20 -translate-y-0.5;
+}
+
+/* ─── Badges ─── */
 .badge-sport {
-  @apply px-3 py-1 bg-brand-primary text-white text-[10px] font-black uppercase tracking-[0.2em] -skew-x-12 inline-block shadow-sm;
+  @apply px-3 py-1.5 bg-brand-primary text-white text-[10px] font-bold uppercase tracking-[0.18em] inline-flex items-center;
 }
 
 .badge-outline {
-  @apply px-3 py-1 border-2 border-brand-primary text-brand-primary text-[10px] font-black uppercase tracking-[0.2em] -skew-x-12 inline-block;
+  @apply px-3 py-1.5 border border-brand-primary text-brand-primary text-[10px] font-bold uppercase tracking-[0.18em] inline-flex items-center;
 }
 
 .badge-muted {
-  @apply px-3 py-1 bg-bg-surface text-text-muted text-[10px] font-black uppercase tracking-[0.2em] -skew-x-12 inline-block border border-border-main;
+  @apply px-3 py-1.5 bg-bg-elevated text-text-muted text-[10px] font-bold uppercase tracking-[0.18em] inline-flex items-center border border-border-main;
 }
 
+.badge-pill {
+  @apply px-3 py-1 text-[10px] font-semibold uppercase tracking-wider rounded-full;
+}
+
+/* ─── Buttons ─── */
 .btn-primary {
-  @apply px-8 py-4 bg-brand-primary hover:bg-rose-700 text-white font-black uppercase tracking-widest -skew-x-12 transition-all duration-300 transform hover:translate-x-1 hover:-translate-y-1 active:scale-95 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.2)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,0.2)];
+  @apply inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-brand-primary text-white text-xs font-bold uppercase tracking-[0.15em] transition-all duration-300 hover:bg-[#a30d26] active:scale-[0.98];
+  box-shadow: 0 4px 14px rgba(200, 16, 46, 0.28);
+}
+
+.btn-primary:hover {
+  box-shadow: 0 6px 20px rgba(200, 16, 46, 0.38);
+  @apply -translate-y-px;
 }
 
 .btn-outline {
-  @apply px-8 py-4 border-2 border-text-main hover:bg-text-main hover:text-bg-main text-text-main font-black uppercase tracking-widest -skew-x-12 transition-all duration-300;
+  @apply inline-flex items-center justify-center gap-2 px-6 py-3.5 border-2 border-text-main/15 bg-bg-surface text-text-main text-xs font-bold uppercase tracking-[0.15em] transition-all duration-300 hover:border-brand-primary hover:text-brand-primary active:scale-[0.98];
+}
+
+.btn-ghost {
+  @apply inline-flex items-center justify-center gap-2 px-4 py-2 text-xs font-semibold uppercase tracking-wider text-text-muted hover:text-brand-primary transition-colors;
+}
+
+.link-action {
+  @apply inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.18em] text-brand-primary hover:text-text-main transition-colors;
+  /* "group" must stay a plain class on the element (Tailwind v4 can't @apply it) */
+}
+
+.link-action svg {
+  @apply transition-transform group-hover:translate-x-1;
+}
+
+/* ─── Form ─── */
+.input-modern {
+  @apply w-full bg-bg-surface border border-border-main py-3 pl-11 pr-4 text-sm text-text-main placeholder:text-text-muted/60 focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/10 transition-all;
+}
+
+.filter-pill {
+  @apply px-4 py-2.5 text-[10px] font-semibold uppercase tracking-widest transition-all duration-200 border rounded-full;
+}
+
+.filter-pill-active {
+  @apply bg-brand-primary text-white border-brand-primary shadow-sm;
+  box-shadow: 0 2px 10px rgba(200, 16, 46, 0.25);
+}
+
+.filter-pill-inactive {
+  @apply bg-bg-surface text-text-muted border-border-main hover:border-brand-primary/40 hover:text-text-main;
+}
+
+/* ─── Layout helpers ─── */
+.section-wrap {
+  @apply max-w-7xl mx-auto px-4 sm:px-6;
+}
+
+.section-pad {
+  @apply py-16 md:py-24;
 }
 
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
 
-/* Seamless sponsors marquee with soft edge fade */
+/* ─── Sponsors marquee ─── */
 .sponsor-marquee {
   overflow: hidden;
   height: 5.5rem;
@@ -98,12 +216,8 @@
 }
 
 @keyframes sponsor-scroll {
-  from {
-    transform: translateY(-50%) translateX(0);
-  }
-  to {
-    transform: translateY(-50%) translateX(-50%);
-  }
+  from { transform: translateY(-50%) translateX(0); }
+  to { transform: translateY(-50%) translateX(-50%); }
 }
 
 .sponsor-fade-left,
@@ -118,10 +232,32 @@
 
 .sponsor-fade-left {
   left: 0;
-  background: linear-gradient(to right, var(--bg-main), transparent);
+  background: linear-gradient(to right, #0f172a, transparent);
 }
 
 .sponsor-fade-right {
   right: 0;
-  background: linear-gradient(to left, var(--bg-main), transparent);
+  background: linear-gradient(to left, #0f172a, transparent);
+}
+
+.safe-top {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .sponsor-track { animation: none; }
+}
+
+@media (max-width: 767px) {
+  .btn-primary, .btn-outline { min-height: 44px; }
 }

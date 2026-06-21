@@ -1,3 +1,13 @@
+export type NavOptions = {
+  athleteId?: number;
+  articleId?: number;
+  competitionId?: number;
+  athleteFilter?: string;
+  search?: string;
+};
+
+export type SetPageFn = (page: Page, opts?: NavOptions) => void;
+
 export type Page =
   | 'accueil'
   | 'athletes'

@@ -16,9 +16,9 @@ export const ArticlePage = ({ article, setPage }: ArticlePageProps) => {
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         onClick={() => setPage('accueil')}
-        className="inline-flex items-center gap-2 text-brand-primary font-bold uppercase tracking-widest text-xs mb-12 hover:gap-4 transition-all"
+        className="link-action group mb-10"
       >
-        <ArrowRight size={16} className="rotate-180" /> Retour à l'accueil
+        <ArrowRight size={15} className="rotate-180" /> Retour à l'accueil
       </motion.button>
 
       <motion.div
@@ -33,20 +33,21 @@ export const ArticlePage = ({ article, setPage }: ArticlePageProps) => {
           </div>
         </div>
 
-        <h1 className="text-4xl md:text-6xl lg:text-7xl font-display font-black italic uppercase tracking-tighter leading-[0.9] mb-12">
+        <h1 className="page-title-lg mb-10">
           {article.title}
         </h1>
 
-        <div className="aspect-video overflow-hidden mb-16 border-4 border-border-main shadow-2xl">
-          <img 
-            src={article.image} 
-            alt={article.title} 
+        <div className="aspect-video overflow-hidden mb-12 card">
+          <img
+            src={article.image}
+            alt={article.title}
             className="w-full h-full object-cover"
+            fetchPriority="high"
             referrerPolicy="no-referrer"
           />
         </div>
 
-        <div className="prose prose-invert max-w-none text-text-muted leading-relaxed text-lg space-y-8">
+        <div className="max-w-none text-text-muted leading-relaxed text-base md:text-lg space-y-6">
           {article.description && (() => {
             const content = article.description;
             
@@ -112,14 +113,14 @@ export const ArticlePage = ({ article, setPage }: ArticlePageProps) => {
                 Cette victoire ne représente pas seulement un succès individuel, mais témoigne du travail acharné accompli par la Fédération Malagasy d'Athlétisme pour structurer et promouvoir la discipline à travers toute l'île. Les investissements dans les infrastructures et l'encadrement technique commencent à porter leurs fruits.
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 my-12">
-                <div className="glass-card p-8 border-t-4 border-brand-primary">
+                <div className="card p-8 border-t-[3px] border-brand-primary">
                   <Mail className="text-brand-primary mb-4" size={32} />
-                  <h4 className="text-white font-bold mb-2">Impact Communautaire</h4>
+                  <h4 className="text-text-main font-bold mb-2">Impact Communautaire</h4>
                   <p className="text-sm">Plus de 5000 jeunes ont été inspirés par cette performance à travers les différentes ligues régionales.</p>
                 </div>
-                <div className="glass-card p-8 border-t-4 border-brand-primary">
+                <div className="card p-8 border-t-[3px] border-brand-primary">
                   <QrCode className="text-brand-primary mb-4" size={32} />
-                  <h4 className="text-white font-bold mb-2">Objectif 2026</h4>
+                  <h4 className="text-text-main font-bold mb-2">Objectif 2026</h4>
                   <p className="text-sm">Cette étape est cruciale dans la préparation des prochains championnats d'Afrique.</p>
                 </div>
               </div>
