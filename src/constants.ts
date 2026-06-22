@@ -1049,10 +1049,40 @@ export const HOME = {
         id: "hero-1",
         title: "Dépassez les limites.",
         subtitle: "Fédération Malagasy d'Athlétisme",
-        image: "/image-header/image (6).png",
+        image: "/image-header/image (1).png",
         cta: {
           label: "Voir le calendrier",
           to: "competitions"
+        }
+      },
+      {
+        id: "hero-2",
+        title: "Records en mouvement.",
+        subtitle: "156 records nationaux et ça continue",
+        image: "/image-header/image (1).jpg",
+        cta: {
+          label: "Voir les classements",
+          to: "classements"
+        }
+      },
+      {
+        id: "hero-3",
+        title: "Vivez chaque instant.",
+        subtitle: "Suivez les compétitions en direct",
+        image: "/image-header/image (2).jpg",
+        cta: {
+          label: "Suivre le direct",
+          to: "direct"
+        }
+      },
+      {
+        id: "hero-4",
+        title: "L'excellence malagasy.",
+        subtitle: "Découvrez nos athlètes d'élite",
+        image: "/image-header/image (3).jpg",
+        cta: {
+          label: "Découvrir les athlètes",
+          to: "athletes"
         }
       }
     ],

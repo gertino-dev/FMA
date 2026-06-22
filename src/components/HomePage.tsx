@@ -123,7 +123,11 @@ export const HomePage = ({
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  const heroImages = LOCAL_MEDIA_IMAGES.slice(0, 4);
+  const heroSlides = HOME.hero.slides;
+  const heroCount = heroSlides.length;
+  const rotationMs = HOME.hero.rotationMs || 8000;
+  const heroImages = heroSlides.map((s) => s.image);
+  const currentSlide = heroSlides[heroIndex] ?? heroSlides[0];
   const videoItems = [
     {
       id: 'v1',
@@ -134,12 +138,22 @@ export const HomePage = ({
   ];
   const videoCount = videoItems.length;
 
+  const autoplayRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const resetHeroAutoplay = () => {
+    if (autoplayRef.current) clearInterval(autoplayRef.current);
+    autoplayRef.current = setInterval(() => {
+      setHeroIndex((prev) => (prev + 1) % heroCount);
+    }, rotationMs);
+  };
+  const goToHeroSlide = (i: number) => {
+    setHeroIndex(((i % heroCount) + heroCount) % heroCount);
+    resetHeroAutoplay();
+  };
+
   useEffect(() => {
-    const interval = setInterval(() => {
-      setHeroIndex((prev) => (prev + 1) % heroImages.length);
-    }, 8000);
-    return () => clearInterval(interval);
-  }, [heroImages.length]);
+    resetHeroAutoplay();
+    return () => { if (autoplayRef.current) clearInterval(autoplayRef.current); };
+  }, [heroCount, rotationMs]);
 
   useEffect(() => {
     getPublicDb()
@@ -219,35 +233,52 @@ export const HomePage = ({
               </span>
             </motion.div>
 
-            {/* Main headline */}
-            <div className="overflow-hidden mb-6">
-              <motion.h1
-                initial={{ y: 80, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.35, duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-                className="text-[clamp(2.75rem,10vw,8.5rem)] font-display font-black leading-[0.9] uppercase italic tracking-tighter"
+            {/* À la une — écho du tag "Watch Live" */}
+            {news[0] && (
+              <motion.button
+                type="button"
+                onClick={() => openArticle(news[0], setSelectedArticle)}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                className="group inline-flex items-center gap-2.5 mb-6 max-w-full bg-bg-surface/80 backdrop-blur-sm border border-border-main pl-1 pr-4 py-1 hover:border-brand-primary/40 transition-colors"
               >
-                Dépassez<br />
-                les{' '}
-                <motion.span
-                  initial={{ color: 'currentColor' }}
-                  animate={{ color: 'var(--color-brand-primary)' }}
-                  transition={{ delay: 1.4, duration: 0.8 }}
-                  className="text-brand-primary"
-                >
-                  Limites.
-                </motion.span>
-              </motion.h1>
-            </div>
+                <span className="bg-brand-primary text-white text-[8px] font-bold uppercase tracking-widest px-2 py-1 shrink-0">À la une</span>
+                <span className="text-xs font-medium text-text-main truncate group-hover:text-brand-primary transition-colors">{news[0].title}</span>
+                <ArrowRight size={12} className="text-text-muted shrink-0 group-hover:translate-x-0.5 transition-transform" />
+              </motion.button>
+            )}
 
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6, duration: 0.7 }}
-              className="text-base md:text-lg text-text-muted leading-relaxed max-w-lg mb-8"
-            >
-              Plongez au cœur de l'excellence athlétique malagasy. Suivez les records, les athlètes et les compétitions qui marquent l'histoire de la Grande Île.
-            </motion.p>
+            {/* Main headline — dynamique par diapositive */}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={heroIndex}
+                initial={{ y: 40, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: -20, opacity: 0 }}
+                transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <div className="overflow-hidden mb-6">
+                  <h1 className="text-[clamp(2.75rem,10vw,8.5rem)] font-display font-black leading-[0.9] uppercase italic tracking-tighter">
+                    {(() => {
+                      const words = currentSlide.title.trim().split(' ');
+                      const lead = words.slice(0, -1).join(' ');
+                      const last = words[words.length - 1];
+                      return (
+                        <>
+                          {lead && <>{lead} </>}
+                          <span className="text-brand-primary">{last}</span>
+                        </>
+                      );
+                    })()}
+                  </h1>
+                </div>
+
+                <p className="text-base md:text-lg text-text-muted leading-relaxed max-w-lg mb-8">
+                  {currentSlide.subtitle}
+                </p>
+              </motion.div>
+            </AnimatePresence>
 
             {/* ── Devise nationale — touche personnalisée FMA ── */}
             <motion.div
@@ -273,17 +304,17 @@ export const HomePage = ({
               className="flex flex-wrap gap-3 sm:gap-4"
             >
               <button
-                onClick={() => setPage('competitions')}
+                onClick={() => setPage(currentSlide.cta.to as Page)}
                 className="btn-primary group flex items-center gap-2 text-sm px-6 sm:px-8 py-3.5 sm:py-4 w-full sm:w-auto justify-center"
               >
-                Voir le calendrier
+                {currentSlide.cta.label}
                 <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
               </button>
               <button
-                onClick={() => setPage('athletes')}
+                onClick={() => setPage(currentSlide.cta.to === 'athletes' ? 'competitions' : 'athletes')}
                 className="btn-outline text-sm px-6 sm:px-8 py-3.5 sm:py-4 w-full sm:w-auto justify-center"
               >
-                Découvrir les athlètes
+                {currentSlide.cta.to === 'athletes' ? 'Voir le calendrier' : 'Découvrir les athlètes'}
               </button>
             </motion.div>
 
@@ -328,15 +359,52 @@ export const HomePage = ({
           </motion.div>
         </motion.div>
 
-        {/* Hero dot navigation */}
-        <div className="absolute bottom-8 left-6 z-10 flex gap-2">
-          {heroImages.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setHeroIndex(i)}
-              className={`transition-all duration-500 ${heroIndex === i ? 'w-8 h-1 bg-brand-primary' : 'w-2 h-1 bg-border-main hover:bg-text-muted'}`}
-            />
-          ))}
+        {/* Carousel controls */}
+        <div className="absolute bottom-8 left-6 right-6 z-10 flex items-center gap-3 lg:right-auto lg:w-[420px]">
+          <button
+            type="button"
+            onClick={() => goToHeroSlide(heroIndex - 1)}
+            aria-label="Diapositive précédente"
+            className="w-9 h-9 shrink-0 flex items-center justify-center border border-border-main/60 bg-bg-surface/80 backdrop-blur-sm hover:border-brand-primary hover:text-brand-primary transition-colors"
+          >
+            <ChevronLeft size={16} />
+          </button>
+
+          <div className="flex-1 flex items-center gap-1.5">
+            {heroSlides.map((s, i) => (
+              <button
+                key={s.id}
+                type="button"
+                onClick={() => goToHeroSlide(i)}
+                aria-label={`Diapositive ${i + 1}`}
+                className="relative h-1 flex-1 bg-border-main overflow-hidden"
+              >
+                {i === heroIndex && (
+                  <motion.span
+                    key={heroIndex}
+                    initial={{ width: '0%' }}
+                    animate={{ width: '100%' }}
+                    transition={{ duration: rotationMs / 1000, ease: 'linear' }}
+                    className="absolute inset-y-0 left-0 bg-brand-primary motion-reduce:w-full"
+                  />
+                )}
+                {i < heroIndex && <span className="absolute inset-0 bg-brand-primary/40" />}
+              </button>
+            ))}
+          </div>
+
+          <span className="text-[10px] font-mono text-text-muted tabular-nums shrink-0">
+            0{heroIndex + 1}/0{heroCount}
+          </span>
+
+          <button
+            type="button"
+            onClick={() => goToHeroSlide(heroIndex + 1)}
+            aria-label="Diapositive suivante"
+            className="w-9 h-9 shrink-0 flex items-center justify-center border border-border-main/60 bg-bg-surface/80 backdrop-blur-sm hover:border-brand-primary hover:text-brand-primary transition-colors"
+          >
+            <ChevronRight size={16} />
+          </button>
         </div>
       </section>
 
@@ -378,104 +446,6 @@ export const HomePage = ({
               </span>
             </motion.button>
           ))}
-        </div>
-      </section>
-
-      {/* ════════════════════════════════ STATS ════════════════════════════════ */}
-      <section className="section-wrap section-pad">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-          {[
-            { label: 'Athlètes licenciés', value: '2 500', icon: Users, suffix: '+' },
-            { label: 'Compétitions 2026', value: '22', icon: Calendar, suffix: '' },
-            { label: 'Ligues régionales', value: '22', icon: Globe, suffix: '' },
-            { label: 'Records nationaux', value: '156', icon: Trophy, suffix: '' },
-          ].map((stat, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.08 }}
-              viewport={{ once: true }}
-              className="stat-card group"
-            >
-              <div className="flex items-start justify-between mb-5">
-                <div className="w-10 h-10 flex items-center justify-center bg-brand-primary/8 text-brand-primary">
-                  <stat.icon size={20} />
-                </div>
-                <span className="text-[10px] font-semibold uppercase tracking-widest text-text-muted/50">FMA</span>
-              </div>
-              <p className="text-3xl md:text-4xl font-display font-bold mb-1 tabular-nums">
-                {stat.value}<span className="text-brand-primary">{stat.suffix}</span>
-              </p>
-              <p className="text-[10px] uppercase tracking-widest font-medium text-text-muted">{stat.label}</p>
-            </motion.div>
-          ))}
-        </div>
-      </section>
-
-      {/* ════════════════════════════════ RECORDS NATIONAUX ════════════════════════════════ */}
-      <section className="relative overflow-hidden py-16 md:py-20 bg-gradient-to-br from-[#3d1a24] via-[#2a1520] to-[#1e2433]">
-        {/* Ambient brand glows */}
-        <div className="absolute -top-24 -left-24 w-80 h-80 bg-brand-primary/15 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-20 right-0 w-72 h-72 bg-brand-secondary/10 rounded-full blur-3xl pointer-events-none" />
-
-        {/* Ghost watermark */}
-        <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[13rem] font-display font-black italic text-white/[0.04] leading-none select-none pointer-events-none hidden lg:block">
-          REC
-        </span>
-
-        <div className="relative max-w-7xl mx-auto px-6">
-          <div className="flex flex-wrap items-center gap-4 mb-10">
-            <div className="flex items-center gap-3">
-              <span className="w-5 h-[2px] bg-brand-primary" />
-              <span className="text-brand-primary text-[9px] font-medium uppercase tracking-[0.3em]">Records Nationaux</span>
-            </div>
-            <span className="text-[9px] font-medium uppercase tracking-widest text-white/50 bg-white/8 px-3 py-1 border border-white/15">
-              Saison 2026
-            </span>
-            <div className="ml-auto flex items-center gap-2">
-              <Zap size={12} className="text-brand-secondary" />
-              <span className="text-[9px] font-medium uppercase tracking-widest text-brand-secondary">Malagasy</span>
-            </div>
-          </div>
-
-          <h2 className="text-5xl md:text-7xl font-display font-black uppercase italic text-white mb-10 leading-none">
-            Meilleurs <span className="text-brand-primary">Temps</span>
-          </h2>
-          <p className="text-white/40 text-sm uppercase tracking-[0.5em] font-light -mt-8 mb-10">
-            An'i Madagasikara
-          </p>
-
-          {/* Records grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2.5">
-            {NATIONAL_RECORDS.map((r) => (
-              <motion.div
-                key={`${r.event}-${r.gender}`}
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                className="bg-white/[0.06] backdrop-blur-sm border border-white/10 p-5 hover:bg-brand-primary/25 hover:border-brand-primary/30 transition-all group cursor-default"
-              >
-                <div className="flex justify-between items-start mb-3">
-                  <span className="text-[9px] font-medium uppercase tracking-widest text-white/45">{r.event}</span>
-                  <span className={`text-[7px] font-black uppercase px-1.5 py-0.5 ${r.gender === 'H' ? 'bg-brand-primary/25 text-brand-primary' : 'bg-brand-secondary/25 text-brand-secondary'}`}>
-                    {r.gender}
-                  </span>
-                </div>
-                <p className="text-xl md:text-2xl font-display font-black text-white group-hover:text-brand-primary transition-colors leading-none mb-2">{r.time}</p>
-                <p className="text-[9px] text-white/50 truncate">{r.athlete}</p>
-              </motion.div>
-            ))}
-          </div>
-
-          <div className="mt-5 flex justify-end">
-            <button
-              onClick={() => setPage('classements')}
-              className="text-[9px] font-black uppercase tracking-[0.3em] text-white/50 hover:text-brand-primary transition-colors"
-            >
-              Tous les records →
-            </button>
-          </div>
         </div>
       </section>
 
@@ -683,6 +653,94 @@ export const HomePage = ({
         </div>
       </motion.section>
 
+      {/* ════════════════════════════════ COMPÉTITION PHARE ════════════════════════════════ */}
+      {competitions[0] && (
+        <motion.section
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1 }}
+          className="relative overflow-hidden"
+        >
+          <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 items-stretch">
+            {/* Bloc de couleur plein */}
+            <motion.div
+              initial={{ opacity: 0, x: -40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              className="order-2 lg:order-1 bg-brand-secondary text-white px-6 py-16 md:py-20 lg:pr-14 flex flex-col justify-center"
+            >
+              <span className="text-[9px] font-medium uppercase tracking-[0.3em] text-white/70 border-l-2 border-white/40 pl-3 block mb-4">
+                Compétition à venir
+              </span>
+              <h3 className="text-3xl sm:text-4xl md:text-5xl font-display font-bold uppercase tracking-tight leading-[0.95] mb-5">
+                {competitions[0].title}
+              </h3>
+              <p className="text-white/75 text-base leading-relaxed max-w-md">
+                Suivez la prochaine grande échéance du calendrier national et préparez-vous à vivre l'événement aux côtés des athlètes malagasy.
+              </p>
+
+              <div className="grid grid-cols-2 gap-4 mt-8">
+                <div className="p-5 bg-white/10 border border-white/15 hover:bg-white/15 transition-colors">
+                  <Calendar className="text-white mb-3" size={18} />
+                  <p className="text-[9px] text-white/60 uppercase tracking-widest mb-1">Date</p>
+                  <p className="text-xl font-display font-bold truncate">{competitions[0].date}</p>
+                </div>
+                <div className="p-5 bg-white/10 border border-white/15 hover:bg-white/15 transition-colors">
+                  <Globe className="text-white mb-3" size={18} />
+                  <p className="text-[9px] text-white/60 uppercase tracking-widest mb-1">Lieu</p>
+                  <p className="text-xl font-display font-bold truncate">{competitions[0].location}</p>
+                </div>
+              </div>
+
+              <button
+                onClick={() => { setSelectedCompetition(competitions[0]); setPage('programme'); }}
+                className="group inline-flex items-center gap-2 bg-white text-brand-secondary font-black uppercase tracking-[0.15em] px-7 py-3.5 text-xs hover:bg-white/90 transition-colors w-fit mt-8"
+              >
+                Voir le programme
+                <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+              </button>
+            </motion.div>
+
+            {/* Photo */}
+            <motion.div
+              initial={{ opacity: 0, x: 40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              className="order-1 lg:order-2 relative bg-bg-surface px-6 py-20 md:py-28 lg:pl-12 flex items-center"
+            >
+              <div className="relative w-full max-w-md mx-auto lg:ml-auto">
+                <div className="aspect-[4/5] overflow-hidden border border-border-main shadow-2xl relative">
+                  <CompetitionImage
+                    title={competitions[0].title}
+                    alt={competitions[0].title}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute right-0 inset-y-0 w-1 bg-brand-secondary" />
+                </div>
+
+                <div
+                  className="absolute -bottom-5 -left-4 md:-left-8 bg-bg-main border border-border-main shadow-2xl p-5 md:p-7"
+                  style={{ borderLeft: '3px solid var(--color-brand-secondary)' }}
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 bg-brand-secondary flex items-center justify-center text-white">
+                      <Trophy size={16} />
+                    </div>
+                    <div>
+                      <p className="text-[9px] text-text-muted uppercase tracking-widest">Catégorie</p>
+                      <p className="text-sm font-display font-bold">{competitions[0].category}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </motion.section>
+      )}
+
       {/* ════════════════════════════════ STATEMENT ════════════════════════════════ */}
       <section className="relative overflow-hidden bg-[#0c0c0e] py-16 sm:py-24">
         <div className="absolute inset-y-0 -right-1/4 w-2/3 bg-brand-primary/10 -skew-x-12 pointer-events-none hidden lg:block" aria-hidden="true" />
@@ -708,6 +766,104 @@ export const HomePage = ({
             Suivre le direct
           </button>
         </motion.div>
+      </section>
+
+      {/* ════════════════════════════════ STATS ════════════════════════════════ */}
+      <section className="section-wrap section-pad">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+          {[
+            { label: 'Athlètes licenciés', value: '2 500', icon: Users, suffix: '+' },
+            { label: 'Compétitions 2026', value: '22', icon: Calendar, suffix: '' },
+            { label: 'Ligues régionales', value: '22', icon: Globe, suffix: '' },
+            { label: 'Records nationaux', value: '156', icon: Trophy, suffix: '' },
+          ].map((stat, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.08 }}
+              viewport={{ once: true }}
+              className="stat-card group"
+            >
+              <div className="flex items-start justify-between mb-5">
+                <div className="w-10 h-10 flex items-center justify-center bg-brand-primary/8 text-brand-primary">
+                  <stat.icon size={20} />
+                </div>
+                <span className="text-[10px] font-semibold uppercase tracking-widest text-text-muted/50">FMA</span>
+              </div>
+              <p className="text-3xl md:text-4xl font-display font-bold mb-1 tabular-nums">
+                {stat.value}<span className="text-brand-primary">{stat.suffix}</span>
+              </p>
+              <p className="text-[10px] uppercase tracking-widest font-medium text-text-muted">{stat.label}</p>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* ════════════════════════════════ RECORDS NATIONAUX ════════════════════════════════ */}
+      <section className="relative overflow-hidden py-16 md:py-20 bg-gradient-to-br from-[#3d1a24] via-[#2a1520] to-[#1e2433]">
+        {/* Ambient brand glows */}
+        <div className="absolute -top-24 -left-24 w-80 h-80 bg-brand-primary/15 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-20 right-0 w-72 h-72 bg-brand-secondary/10 rounded-full blur-3xl pointer-events-none" />
+
+        {/* Ghost watermark */}
+        <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[13rem] font-display font-black italic text-white/[0.04] leading-none select-none pointer-events-none hidden lg:block">
+          REC
+        </span>
+
+        <div className="relative max-w-7xl mx-auto px-6">
+          <div className="flex flex-wrap items-center gap-4 mb-10">
+            <div className="flex items-center gap-3">
+              <span className="w-5 h-[2px] bg-brand-primary" />
+              <span className="text-brand-primary text-[9px] font-medium uppercase tracking-[0.3em]">Records Nationaux</span>
+            </div>
+            <span className="text-[9px] font-medium uppercase tracking-widest text-white/50 bg-white/8 px-3 py-1 border border-white/15">
+              Saison 2026
+            </span>
+            <div className="ml-auto flex items-center gap-2">
+              <Zap size={12} className="text-brand-secondary" />
+              <span className="text-[9px] font-medium uppercase tracking-widest text-brand-secondary">Malagasy</span>
+            </div>
+          </div>
+
+          <h2 className="text-5xl md:text-7xl font-display font-black uppercase italic text-white mb-10 leading-none">
+            Meilleurs <span className="text-brand-primary">Temps</span>
+          </h2>
+          <p className="text-white/40 text-sm uppercase tracking-[0.5em] font-light -mt-8 mb-10">
+            An'i Madagasikara
+          </p>
+
+          {/* Records grid */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2.5">
+            {NATIONAL_RECORDS.map((r) => (
+              <motion.div
+                key={`${r.event}-${r.gender}`}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="bg-white/[0.06] backdrop-blur-sm border border-white/10 p-5 hover:bg-brand-primary/25 hover:border-brand-primary/30 transition-all group cursor-default"
+              >
+                <div className="flex justify-between items-start mb-3">
+                  <span className="text-[9px] font-medium uppercase tracking-widest text-white/45">{r.event}</span>
+                  <span className={`text-[7px] font-black uppercase px-1.5 py-0.5 ${r.gender === 'H' ? 'bg-brand-primary/25 text-brand-primary' : 'bg-brand-secondary/25 text-brand-secondary'}`}>
+                    {r.gender}
+                  </span>
+                </div>
+                <p className="text-xl md:text-2xl font-display font-black text-white group-hover:text-brand-primary transition-colors leading-none mb-2">{r.time}</p>
+                <p className="text-[9px] text-white/50 truncate">{r.athlete}</p>
+              </motion.div>
+            ))}
+          </div>
+
+          <div className="mt-5 flex justify-end">
+            <button
+              onClick={() => setPage('classements')}
+              className="text-[9px] font-black uppercase tracking-[0.3em] text-white/50 hover:text-brand-primary transition-colors"
+            >
+              Tous les records →
+            </button>
+          </div>
+        </div>
       </section>
 
       {/* ════════════════════════════════ CLASSEMENTS + ÉVÉNEMENTS ════════════════════════════════ */}
